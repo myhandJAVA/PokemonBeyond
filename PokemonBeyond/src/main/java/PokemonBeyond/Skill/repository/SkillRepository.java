@@ -20,7 +20,7 @@ public class SkillRepository {
         saveSkills(fileOutput, skillList);
 
         for (Skill skill : skillList) {
-            System.out.println("skill = " + skill);
+//            System.out.println("skill = " + skill);
         }
 
     }
@@ -38,7 +38,7 @@ public class SkillRepository {
                     if (st.countTokens() >= 2) {
                         String skillName = st.nextToken();
                         double skillPower = Double.parseDouble(st.nextToken());
-                        System.out.println("Loaded: " + skillName + " " + skillPower);
+//                        System.out.println("Loaded: " + skillName + " " + skillPower);
 
                         Skill skill = new Skill(skillName, skillPower);
                         skillList.add(skill);

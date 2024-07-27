@@ -7,6 +7,7 @@ public class Application {
 
     public static void main(String[] args) {
 
+        // 랜덤스킬
         System.out.println("ddd == " + ss.selectRandomSkill());
 
     }

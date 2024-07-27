@@ -10,8 +10,8 @@ import java.util.Random;
 public class SkillService {
 
     private final SkillRepository sr = new SkillRepository();
+//    private final PokemonService ps = new PokemonService();
     private final Random random = new Random();
-//    private final MemberService ms = new MemberService();
 
     public SkillService() {
     }
@@ -23,7 +23,7 @@ public class SkillService {
         ArrayList<Skill> randomSkills = new ArrayList<>();
 
         if (skillList.size() < 2) {
-            throw new IllegalArgumentException("Skill list must contain at least 2 skills");
+            throw new IllegalArgumentException("2개 이상의 스킬이 들어가야 함.");
         }
 
         int firstNum = random.nextInt(skillList.size());
@@ -38,8 +38,9 @@ public class SkillService {
         return randomSkills;
     }
 
-    public void selectSkill() {
-
+    public void selectSkill(int id) {
+        // 회원id를 통해 몬스터볼쪽에서 어떤 포켓몬을 잡았는지 받고 각 포켓몬을 도감에서 스킬을 가져옴
+        
     }
 
 }
