@@ -1,8 +1,9 @@
 package PokemonBeyond.Encyclopedia.aggregate;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Encyclopedia {
+public class Encyclopedia implements Serializable {
     private int memberNo;
     private ArrayList<Integer> pokemonNoInEncyclopedia;
 

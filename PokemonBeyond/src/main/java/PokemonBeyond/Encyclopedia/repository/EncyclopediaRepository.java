@@ -16,12 +16,12 @@ public class EncyclopediaRepository {
         File encyclopediaFile = new File(
                 "src/main/java/PokemonBeyond/Encyclopedia/db/encyclopedia.dat");
         if(!encyclopediaFile.exists()){
-            savePokemonMasterEncyclopedia(encyclopediaFile);
+            saveEncyclopedia(makePokemonMasterEncyc(),encyclopediaFile);
         }
         loadEncyclopediaList();
     }
 
-    private void savePokemonMasterEncyclopedia(File file) {
+    private void saveEncyclopedia(ArrayList<Encyclopedia> encycList ,File file) {
         ObjectOutputStream ois = null;
         try {
             ois = new ObjectOutputStream(
@@ -29,12 +29,9 @@ public class EncyclopediaRepository {
                             new FileOutputStream(file)
                     )
             );
-            ArrayList<Pokemon> pokemonList = pokemonRepository.getPokemonList();
-            ArrayList<Integer> pokemonNoList = new ArrayList<>();
-            for(int i=0; i<pokemonList.size(); i++ ){
-                pokemonNoList.add(pokemonList.get(i).getPokemonNo());
+            for(int i=0; i<encycList.size();i++){
+                ois.writeObject(encycList.get(i));
             }
-            ois.writeObject(new Encyclopedia(0,pokemonNoList));
         } catch (IOException e) {
             throw new RuntimeException(e);
         } finally {
@@ -45,6 +42,18 @@ public class EncyclopediaRepository {
             }
         }
 
+    }
+
+    private ArrayList<Encyclopedia> makePokemonMasterEncyc() {
+        ArrayList<Pokemon> pokemonList = pokemonRepository.getPokemonList();
+        ArrayList<Integer> pokemonNoList = new ArrayList<>();
+        for(int i=0; i<pokemonList.size(); i++ ){
+            pokemonNoList.add(pokemonList.get(i).getPokemonNo());
+        }
+        ArrayList<Encyclopedia> masterList = new ArrayList<>();
+        Encyclopedia pokemonMasterEncyc = new Encyclopedia(0, pokemonNoList);
+        masterList.add(pokemonMasterEncyc);
+        return masterList;
     }
 
     public ArrayList<Encyclopedia> selectAllEncyclopedia(){
@@ -89,15 +98,22 @@ public class EncyclopediaRepository {
         }
     }
 
-    private int updateEncyclopediaList(Encyclopedia encyclopedia){
+    public int insertEncyclopedia(Encyclopedia encyclopedia){
         int result = 0;
+        int memberNo = encyclopedia.getMemberNo();
+        for(int i=0; i <encyclopediaList.size(); i++){
+            if(encyclopediaList.get(i).getMemberNo() == memberNo){
+                result = -1;
+                return result;
+            }
+        }
         File encyclopediaFile = new File(
                 "src/main/java/PokemonBeyond/Encyclopedia/db/encyclopedia.dat");
         MyOutput updateEncyclopediaListStream = null;
         try {
             updateEncyclopediaListStream = new MyOutput(
                     new BufferedOutputStream(
-                            new FileOutputStream(encyclopediaFile)
+                            new FileOutputStream(encyclopediaFile,true)
                     )
             );
             updateEncyclopediaListStream.writeObject(encyclopedia);
@@ -114,5 +130,32 @@ public class EncyclopediaRepository {
             }
         }
         return result;
+    }
+
+    public int deleteEncyclopedia(int memberNo){
+        int result = 0;
+        boolean isInList = false;
+        int deletedMemNo = -1;
+        ArrayList<Encyclopedia> copiedList = (ArrayList<Encyclopedia>) encyclopediaList.clone();
+        for(int i=0; i<copiedList.size();i++){
+            if(copiedList.get(i).getMemberNo() == memberNo){
+                copiedList.remove(i);
+                isInList = true;
+                deletedMemNo = i;
+            }
+        }
+        if(!isInList){
+            System.out.println("해당 멤버 번호가 없습니다. 다시 확인해주세요.");
+            result = -1;
+            return result;
+        }
+        saveEncyclopedia(copiedList,new File("src/main/java/PokemonBeyond/Encyclopedia/db/encyclopedia.dat"));
+        encyclopediaList.remove(deletedMemNo);
+        result = 1;
+        return result;
+    }
+
+    public ArrayList<Encyclopedia> getEncyclopediaList() {
+        return encyclopediaList;
     }
 }
