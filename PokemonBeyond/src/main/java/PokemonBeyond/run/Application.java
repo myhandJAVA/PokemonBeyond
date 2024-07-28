@@ -1,4 +1,4 @@
-package run;
+package PokemonBeyond.run;
 
 public class Application {
 }
