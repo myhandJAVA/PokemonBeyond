@@ -7,38 +7,39 @@ import java.util.ArrayList;
 
 public class MonsterBallRepository {
 
-    ArrayList<MyPokemon> allMyPokemons = new ArrayList<>();
+    private ArrayList<Member> memberList;
+    private final String filePath = "src/main/java/PokemonBeyond/Member/db/";
 
     public MonsterBallRepository() {
+        this.allMebersPokemons = new ArrayList<>();
+        loadAllMembersPokemons();
     }
 
-    public void loadAllMyPokemons(File file) {
-        ObjectInputStream ois = null;
-        try {
-            ois = new ObjectInputStream(
-                    new BufferedInputStream(new FileInputStream(file)
-                    )
-            );
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } finally {
-            if (ois != null) {
-                try {
-                    ois.close();
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
+    private void loadAllMembersPokemons() {
+        File file = new File(filePath);
+        if(file.exists()) {
+            ObjectInputStream ois = null;
+            try {
+                ois = new ObjectInputStream(
+                        new BufferedInputStream(
+                                new FileInputStream(file)
+                        )
+                );
+            } catch (IOException e) {
+                System.out.println("파일 로딩 중 에러가 발생했습니다.");
+                allMebersPokemons = new ArrayList<>();
+            } finally {
+                if(ois != null) {
+                    try {
+                        ois.close();
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
             }
         }
     }
+    private static saveAllMembersPokemons() {
 
-    public static void updateAllMyPokemons(ArrayList<ArrayList<MyPokemon>> allMembersPokemon, Member changedMem) {
-        /* 설명. Member의 idx를 allMembersPokemon의 idx로 사용합니다. */
-        int idx = changedMem.getIdx();
-        for (int i = 0; i < allMembersPokemon.size(); i++) {
-            if(idx == i) {
-                allMembersPokemon.set(i, changedMem.get(Mypokemons));
-            }
-        }
     }
 }
