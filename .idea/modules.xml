@@ -2,7 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/PokemonBeyond.iml" filepath="$PROJECT_DIR$/.idea/PokemonBeyond.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/PokemonBeyond.PokemonBeyond.iml" filepath="$PROJECT_DIR$/.idea/modules/PokemonBeyond.PokemonBeyond.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/PokemonBeyond.PokemonBeyond.main~1.iml" filepath="$PROJECT_DIR$/.idea/modules/PokemonBeyond.PokemonBeyond.main~1.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/PokemonBeyond.PokemonBeyond.test~1.iml" filepath="$PROJECT_DIR$/.idea/modules/PokemonBeyond.PokemonBeyond.test~1.iml" />
     </modules>
   </component>
 </project>
