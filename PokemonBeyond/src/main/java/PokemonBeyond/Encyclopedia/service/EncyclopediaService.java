@@ -21,13 +21,17 @@ public class EncyclopediaService {
 
     public void findEncyclopedia(int memberNo){
        Encyclopedia encyclopedia =  encyclopediaRepository.selectEncyclopedia(memberNo);
+       try{
         System.out.println(encyclopedia.getMemberNo()+"님의 도감에 등록된 포켓몬 목록입니다.");
         for(int i=0; i<encyclopedia.getPokemonNoInEncyclopedia().size(); i++){
             Pokemon pokemon = pokemonRepository.selectPokemon(encyclopedia.getPokemonNoInEncyclopedia().get(i));
             System.out.println("No. " + pokemon.getPokemonNo() +
                     " " + pokemon.getPokemonName() +
                     " | 공격력: " + pokemon.getPokemonPower());
-        }
+            }
+        } catch (NullPointerException e){
+           System.out.println("해당 번호 도감이 없습니다.");
+       }
     }
 
     public void addPokemonToEncylopedia(int memberNo, int pokemonNo){
