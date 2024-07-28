@@ -1,5 +1,6 @@
 package PokemonBeyond.MonsterBall.repository;
 
+import PokemonBeyond.Member.stream.MyObjectOutput;
 import PokemonBeyond.MonsterBall.aggregate.MyPokemon;
 
 import java.io.*;
@@ -95,5 +96,22 @@ public class MonsterBallRepository {
         int result = 0;
         ArrayList<MyPokemon> memberPokemons = allMebersPokemons.get(selectedMember.getMemNo);
 
+    }
+
+    public int insertnewMyPokemonList(ArrayList<MyPokemon> newmemberPokemons) {
+        int result = 0;
+        MyObjectOutput moo = null;
+        try {
+            moo = new MyObjectOutput(
+                    new BufferedOutputStream(
+                            new FileOutputStream(filePath, true)
+                    )
+            );
+            moo.writeObject(newmemberPokemons);
+            allMebersPokemons.add(newmemberPokemons);
+            result = 1;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
