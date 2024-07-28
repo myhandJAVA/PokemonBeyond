@@ -1,21 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-<<<<<<< HEAD
-  <component name="GradleSettings">
-    <option name="linkedExternalProjectsSettings">
-      <GradleProjectSettings>
-        <option name="externalProjectPath" value="$PROJECT_DIR$/PokemonBeyond" />
-        <option name="modules">
-          <set>
-            <option value="$PROJECT_DIR$/PokemonBeyond" />
-          </set>
-        </option>
-      </GradleProjectSettings>
-    </option>
-=======
   <component name="GradleMigrationSettings" migrationVersion="1" />
   <component name="GradleSettings">
     <option name="parallelModelFetch" value="true" />
->>>>>>> f9a05822e362701dcba424fdae884c8c6f7de0d9
   </component>
 </project>
