@@ -1,9 +1,11 @@
 package PokemonBeyond.Skill.repository;
 
+import PokemonBeyond.Pokemon.aggregate.Pokemon;
 import PokemonBeyond.Skill.aggregate.Skill;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.StringTokenizer;
 
 public class SkillRepository {
@@ -88,4 +90,5 @@ public class SkillRepository {
     public ArrayList<Skill> selectRandomSkills() {
         return skillList;
     }
+
 }

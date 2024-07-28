@@ -1,6 +1,7 @@
 package PokemonBeyond.Skill.aggregate;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class Skill implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -29,6 +30,19 @@ public class Skill implements Serializable {
 
     public void setSkillPower(double skillPower) {
         this.skillPower = (int)skillPower;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Skill skill = (Skill) o;
+        return skillPower == skill.skillPower && Objects.equals(skillName, skill.skillName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(skillName, skillPower);
     }
 
     @Override
