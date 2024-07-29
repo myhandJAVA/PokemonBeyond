@@ -1,3 +1,14 @@
+<<<<<<< HEAD
+package PokemonBeyond.run;
+
+import java.util.Scanner;
+
+public class Application {
+    public static void main(String[] args) {
+
+    }
+}
+=======
 //package PokemonBeyond.run;
 //
 //import PokemonBeyond.Encyclopedia.service.EncyclopediaService;
@@ -181,3 +192,4 @@
 //        }
 //    }
 //}
+>>>>>>> main
