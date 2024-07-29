@@ -16,7 +16,6 @@ public class MonsterBallRepository {
     private Map<String, ArrayList<MyPokemon>> allMebersPokemons;
     private static final String filePath = "src/main/java/PokemonBeyond/MonsterBall/db/allMebersPokemons.dat";
     private static final int MAX_POKEMON_PER_MEMBER = 6;
-    private final MonsterballService monsterballService = new MonsterballService();
 
     public MonsterBallRepository() {
         this.allMebersPokemons = new HashMap<>();
@@ -102,20 +101,19 @@ public class MonsterBallRepository {
 
     // 삭제하길 원하는 포켓몬을 새 포켓몬으로 덮어씌우는 메서드
     // 이미 공간이 불충분하다는 메서드를 통과한 이후라고 가정하고 수정할 예정
-    public int updatePokemonToMember(Member selectedMember, MyPokemon pokemon) {
-        int result = 0;
-        ArrayList<MyPokemon> memberPokemons = allMebersPokemons.get(selectedMember.getId());
-        if(ensureMaxPokemonLimit(memberPokemons)) {
-            int index = pickdeletePokemon(memberPokemons);
-            memberPokemons.set(index, pokemon);
-            result = 1;
-        }
-        return result;
-    }
+//    public int updatePokemonToMember(Member selectedMember, MyPokemon pokemon) {
+//        int result = 0;
+//        ArrayList<MyPokemon> memberPokemons = allMebersPokemons.get(selectedMember.getId());
+//        if(ensureMaxPokemonLimit(memberPokemons)) {
+//            int index = pickdeletePokemon(memberPokemons);
+//            memberPokemons.set(index, pokemon);
+//            result = 1;
+//        }
+//        return result;
+//    }
 
-    private int pickdeletePokemon(ArrayList<MyPokemon> memberPokemons) {
-
-    }
+//    private int pickdeletePokemon(ArrayList<MyPokemon> memberPokemons) {
+//    }
 
     // 새로운 회원 리스트 생성 후 등록
     public String creatnewMyPokemonList(String id) {

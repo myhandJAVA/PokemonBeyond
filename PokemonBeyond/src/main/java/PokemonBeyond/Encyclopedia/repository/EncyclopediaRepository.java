@@ -44,7 +44,7 @@ public class EncyclopediaRepository {
 
     }
 
-    private ArrayList<Encyclopedia> makePokemonMasterEncyc() {
+    private ArrayList<Encyclopedia> makePokemonMasterEncyc() { // 삭제하기
         ArrayList<Pokemon> pokemonList = pokemonRepository.getPokemonList();
         ArrayList<Integer> pokemonNoList = new ArrayList<>();
         for(int i=0; i<pokemonList.size(); i++ ){

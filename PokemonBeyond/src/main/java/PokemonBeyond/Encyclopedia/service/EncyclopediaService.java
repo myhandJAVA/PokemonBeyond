@@ -66,5 +66,8 @@ public class EncyclopediaService {
            System.out.println("도감이 정상적으로 삭제되었습니다.");
        } else System.out.println("오류가 생겨 도감이 삭제되지 않았습니다.");
     }
+    public Encyclopedia getEncyclopedia(String memberId){
+        return  encyclopediaRepository.selectEncyclopedia(memberId);
+    }
 
 }

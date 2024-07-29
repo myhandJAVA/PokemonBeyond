@@ -1,9 +1,10 @@
 package PokemonBeyond.run;
 
-import PokemonBeyond.Encyclopedia.aggregate.Encyclopedia;
 import PokemonBeyond.Encyclopedia.service.EncyclopediaService;
 import PokemonBeyond.Member.aggregate.Member;
 import PokemonBeyond.Member.service.MemberService;
+import PokemonBeyond.MonsterBall.aggregate.MyPokemon;
+import PokemonBeyond.MonsterBall.service.MonsterballService;
 import PokemonBeyond.Pokemon.aggregate.Pokemon;
 import PokemonBeyond.Pokemon.service.PokemonService;
 
@@ -13,12 +14,13 @@ import java.util.Scanner;
 public class Application {
     static final PokemonService pokemonService = new PokemonService();
     static final EncyclopediaService encyclopediaService = new EncyclopediaService();
-    //    static final MypokemonService mypokemonService = new MypokemonService();
+        static final MonsterballService monsterballService = new MonsterballService();
     static final MemberService memberService = new MemberService();
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         boolean isFirstMenu = true;
+        String loginId = null;
 
         while(isFirstMenu){
             System.out.println("=====PokemonBeyond=====");
@@ -48,7 +50,7 @@ public class Application {
                     sc.nextLine();
                     System.out.println("로그인에 필요한 정보를 입력하세요.");
                     System.out.print("아이디: ");
-                    String loginId = sc.nextLine();
+                    loginId = sc.nextLine();
                     System.out.print("비밀번호: ");
                     String loginPwd = sc.nextLine();
                     Member loginedMember = memberService.logInMember(new Member(loginId,loginPwd));
@@ -109,7 +111,10 @@ public class Application {
                         break;
                     case 2:
                         System.out.println("===== 내 포켓몬 =====");
-                        System.out.println("1. ???");
+                        System.out.println("1. 내 포켓몬 조회");
+                        System.out.println("2. 오박사님께 보내기");
+                        System.out.println("3. 이름 짓기");
+                        System.out.println("4. 내 포켓몬 스킬 조회");
                         System.out.print("원하는 메뉴를 선택하세요: ");
                         myPokemonMenu = sc.nextInt();
                         break;
@@ -125,56 +130,63 @@ public class Application {
                             wildMenu = sc.nextInt();
                             switch (wildMenu) {
                                 case 1:
+                                    ArrayList<MyPokemon> fightingPokemonList = monsterballService.showMyPokemons(loginId);
                                     System.out.print("포켓몬을 선택해주세요: ");
-//                                    int toFightPokemon = sc.nextInt();
-//                                    Pokemon fightingPokemon = mypokemonService.findPokemon(loginId, toFightPokemon);
-//                                    System.out.println(fightingPokemon.getPokemonName() + "의 스킬 목록");
-//                                    System.out.println(fightingPokemon.getPoekmonSkill());
+                                    int toFightPokemon = sc.nextInt();
+                                    MyPokemon fightingPokemon = fightingPokemonList.get(toFightPokemon);
+                                    System.out.println(fightingPokemon.getPokemon().getPokemonName() + "의 스킬 목록");
+                                    System.out.println(fightingPokemon.getPokemon().getPoekmonSkill());
                                     System.out.print("사용할 스킬을 선택해주세요: ");
                                     int fightSkillNo = sc.nextInt();
-//                                    if (pokemonService.isWildPokemonWin(meetPokemon, fightingPokemon, fightSkillNo)) {
-//                                        System.out.println(fightingPokemon.getPokemonName() + "은(는) 쓰러졌다!");
-//                                    } else {
-//                                        System.out.println("야생의 " + meetPokemon.getPokemonName() + "은(는) 쓰러졌다!");
-//                                        System.out.println("신난다! " + meetPokemon.getPokemonName() + "을(를) 잡았다!");
-//                                        ArrayList<Integer> myPokemonNoList = encyclopediaService
-//                                                .getEncyclopedia(loginId).getPokemonNoInEncyclopedia();
-//                                        boolean isInEncyc = false;
-//                                        for(int pokemonNo: myPokemonNoList){
-//                                            if(pokemonNo == meetPokemon.getPokemonNo()) isInEncyc = true;
-//                                        }
-//                                        if(!isInEncyc){
-//                                            encyclopediaService.addPokemonToEncylopedia(loginId, meetPokemon.getPokemonNo());
-//                                        }
-                                    System.out.println("테스트 전투 종료");
-                                    break;
+                                    if (pokemonService.isWildPokemonWin(meetPokemon, fightingPokemon.getPokemon(), fightSkillNo)) {
+                                        System.out.println(fightingPokemon.getPokemon().getPokemonName() + "은(는) 쓰러졌다!");
+                                    } else {
+                                        System.out.println("야생의 " + meetPokemon.getPokemonName() + "은(는) 쓰러졌다!");
+                                        System.out.println("신난다! " + meetPokemon.getPokemonName() + "을(를) 잡았다!");
+                                        ArrayList<Integer> myPokemonNoList = encyclopediaService
+                                                .getEncyclopedia(loginId).getPokemonNoInEncyclopedia();
+                                        boolean isInEncyc = false;
+                                        for (int pokemonNo : myPokemonNoList) {
+                                            if (pokemonNo == meetPokemon.getPokemonNo()) isInEncyc = true;
+                                        }
+                                        if (!isInEncyc) {
+                                            encyclopediaService.addPokemonToEncylopedia(loginId, meetPokemon.getPokemonNo());
+                                        }
+                                        //스킬추가 추가 - 꽉차면 삭제
+                                        break;
+                                    }
                                 case 2:
                                     isthirdMenu = false;
                                     break;
                             }
                         }
+                                break;
+                                case 4:
+                                    System.out.println("===== 내 회원정보 =====");
+                                    System.out.println("1. 내 정보 조회");
+                                    System.out.println("2. 내 정보 수정");
+                                    System.out.println("3. 회원 탈퇴");
+                                    System.out.print("메뉴 입력: ");
+                                    memberInformationMenu = sc.nextInt();
+                                    break;
+                                case 5:
+                                    System.out.println("===== 게시판 =====");
+                                    System.out.println("1. 게시글 조회");
+                                    System.out.println("2. 게시글 작성");
+                                    System.out.println("3. 게시글 수정");
+                                    System.out.println("4. 게시글 삭제");
+                                    System.out.print("메뉴 입력: ");
+                                    communityMenu = sc.nextInt();
+                                    break;
+                                case 6:
+//                                    System.out.println("====== 친구목록 =====");
+//                                    System.out.println("1. ???"); // 조회 추가 삭제
+//                                    System.out.print("메뉴 입력: ");
+//                                    friendMenu = sc.nextInt();
+                                    break;
+                                case 7:
+                                    return;
 
-                        break;
-                    case 4:
-                        System.out.println("===== 내 회원정보 =====");
-                        System.out.println("1. ???");
-                        System.out.print("메뉴 입력: ");
-                        memberInformationMenu = sc.nextInt();
-                        break;
-                    case 5:
-                        System.out.println("===== 게시판 =====");
-                        System.out.println("1. ???");
-                        System.out.print("메뉴 입력: ");
-                        communityMenu = sc.nextInt();
-                        break;
-                    case 6:
-                        System.out.println("====== 친구목록 =====");
-                        System.out.println("1. ???");
-                        System.out.print("메뉴 입력: ");
-                        friendMenu = sc.nextInt();
-                        break;
-                    case 7:
-                        return;
                 }
             }
 
