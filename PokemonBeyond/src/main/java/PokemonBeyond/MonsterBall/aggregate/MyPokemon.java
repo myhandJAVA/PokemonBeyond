@@ -27,6 +27,14 @@ public class MyPokemon implements Serializable {
     }
 
     @Override
+    public String toString() {
+        return "MyPokemon{" +
+                "pokemon=" + pokemon +
+                ", name='" + name + '\'' +
+                '}';
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
