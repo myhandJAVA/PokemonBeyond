@@ -4,23 +4,23 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class Encyclopedia implements Serializable {
-    private int memberNo;
+    private String memberId;
     private ArrayList<Integer> pokemonNoInEncyclopedia;
 
     public Encyclopedia() {
     }
 
-    public Encyclopedia(int memberNo, ArrayList<Integer> pokemonNoInEncyclopedia) {
-        this.memberNo = memberNo;
+    public Encyclopedia(String memberId, ArrayList<Integer> pokemonNoInEncyclopedia) {
+        this.memberId = memberId;
         this.pokemonNoInEncyclopedia = pokemonNoInEncyclopedia;
     }
 
-    public int getMemberNo() {
-        return memberNo;
+    public String getMemberId() {
+        return memberId;
     }
 
-    public void setMemberNo(int memberNo) {
-        this.memberNo = memberNo;
+    public void setMemberId(String memberId) {
+        this.memberId = memberId;
     }
 
     public ArrayList<Integer> getPokemonNoInEncyclopedia() {
@@ -34,7 +34,7 @@ public class Encyclopedia implements Serializable {
     @Override
     public String toString() {
         return "Encyclopedia{" +
-                "memberNo=" + memberNo +
+                "memberId=" + memberId +
                 ", pokemonNoInEncyclopedia=" + pokemonNoInEncyclopedia +
                 '}';
     }

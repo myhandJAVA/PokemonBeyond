@@ -14,7 +14,7 @@ public class Application {
     static final PokemonService pokemonService = new PokemonService();
     static final EncyclopediaService encyclopediaService = new EncyclopediaService();
 //    static final MypokemonService mypokemonService = new MypokemonService();
-    //   static final MemberService memberService = new MemberService();
+       static final MemberService memberService = new MemberService();
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
@@ -42,9 +42,7 @@ public class Application {
                     sc.nextLine();
                     System.out.print("닉네임: ");
                     String registNickname = sc.nextLine();
-
-//                    memberService.registMember(new Member(registId,registPwd,registName,registAge,registNickname));
-                    isFirstMenu = false;
+                    memberService.registMember(new Member(registId,registPwd,registName,registAge,registNickname));
                     break;
                 case 2:
                     sc.nextLine();
@@ -53,9 +51,9 @@ public class Application {
                     String loginId = sc.nextLine();
                     System.out.print("비밀번호: ");
                     String loginPwd = sc.nextLine();
+                    Member loginedMember = memberService.logInMember(new Member(loginId,loginPwd));
+                    if (loginedMember!=null)  isFirstMenu = false;
 
-//                    memberService.loginMember(loginId,loginPwd);
-                    isFirstMenu = false;
                     break;
                 case 3:
                     return;
@@ -99,9 +97,9 @@ public class Application {
                                     break;
                                 case 2:
                                     System.out.println("회원의 도감을 상세 조회합니다.");
-                                    System.out.print("조회할 회원의 번호를 입력하세요: ");
-                                    int toFindEncycMemNo = sc.nextInt();
-                                    encyclopediaService.findEncyclopedia(toFindEncycMemNo);
+                                    System.out.print("조회할 회원의 아이디를 입력하세요: ");
+                                    String toFindEncycMemId = sc.next();
+                                    encyclopediaService.findEncyclopedia(toFindEncycMemId);
                                     break;
                                 case 3:
                                     isthirdMenu = false;
@@ -129,7 +127,7 @@ public class Application {
                                 case 1:
                                     System.out.print("포켓몬을 선택해주세요: ");
 //                                    int toFightPokemon = sc.nextInt();
-//                                    Pokemon fightingPokemon = mypokemonService.findPokemon(memberNo, toFightPokemon);
+//                                    Pokemon fightingPokemon = mypokemonService.findPokemon(loginId, toFightPokemon);
 //                                    System.out.println(fightingPokemon.getPokemonName() + "의 스킬 목록");
 //                                    System.out.println(fightingPokemon.getPoekmonSkill());
                                     System.out.print("사용할 스킬을 선택해주세요: ");
@@ -140,13 +138,13 @@ public class Application {
 //                                        System.out.println("야생의 " + meetPokemon.getPokemonName() + "은(는) 쓰러졌다!");
 //                                        System.out.println("신난다! " + meetPokemon.getPokemonName() + "을(를) 잡았다!");
 //                                        ArrayList<Integer> myPokemonNoList = encyclopediaService
-//                                                .getEncyclopedia(memberNo).getPokemonNoInEncyclopedia();
+//                                                .getEncyclopedia(loginId).getPokemonNoInEncyclopedia();
 //                                        boolean isInEncyc = false;
 //                                        for(int pokemonNo: myPokemonNoList){
 //                                            if(pokemonNo == meetPokemon.getPokemonNo()) isInEncyc = true;
 //                                        }
 //                                        if(!isInEncyc){
-//                                            encyclopediaService.addPokemonToEncylopedia(memberNo, meetPokemon.getPokemonNo());
+//                                            encyclopediaService.addPokemonToEncylopedia(loginId, meetPokemon.getPokemonNo());
 //                                        }
                                     System.out.println("테스트 전투 종료");
                                     break;

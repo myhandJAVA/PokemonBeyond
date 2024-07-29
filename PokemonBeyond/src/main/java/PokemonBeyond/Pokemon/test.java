@@ -32,25 +32,25 @@ public class test {
                     es.findAllEncyclopedia();
                     break;
                 case 2:
-                    System.out.print("조회할 회원번호 입력: ");
-                    int memNo = sc.nextInt();
-                    es.findEncyclopedia(memNo);
+                    System.out.print("조회할 회원ID 입력: ");
+                    String memId = sc.next();
+                    es.findEncyclopedia(memId);
                     break;
                 case 3:
-                    System.out.print("추가할 회원번호 입력: ");
-                    int addEncycMemNo = sc.nextInt();
-                    es.addEncyclopedia(addEncycMemNo,ps.meetRandomPokemon());
+                    System.out.print("추가할 회원ID 입력: ");
+                    String addEncycMemId = sc.next();
+                    es.addEncyclopedia(addEncycMemId,ps.meetRandomPokemon());
                     break;
                 case 4:
-                    System.out.print("추가할 포켓몬번호, 추가할 회원번호 입력: ");
+                    System.out.print("추가할 포켓몬번호, 추가할 회원ID 입력: ");
                     int addPokemon = sc.nextInt();
-                    int addMemNo = sc.nextInt();
-                    es.addPokemonToEncylopedia(addMemNo,addPokemon);
+                    String addMemId = sc.next();
+                    es.addPokemonToEncylopedia(addMemId,addPokemon);
                     break;
                 case 5 :
-                    System.out.print("삭제할 회원번호 입력: ");
-                    int delMemNo = sc.nextInt();
-                    es.removeEncyclopedia(delMemNo);
+                    System.out.print("삭제할 회원ID 입력: ");
+                    String delMemId = sc.next();
+                    es.removeEncyclopedia(delMemId);
                     break;
                 case 6:
                     System.out.println("앗! 야생 " + ps.meetRandomPokemon().getPokemonName()+" 이(가) 튀어나왔다!");
