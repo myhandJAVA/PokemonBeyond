@@ -12,12 +12,22 @@ public class MemberService {
 
     public void registMember(Member newMember) {
 
-        int result = mr.insertMember(newMember);
+        boolean result = mr.insertMember(newMember);
 
-        if (result == 1) {
+        if (result == true) {
             System.out.println(newMember.getNickName() + "님 포켓몬 세계에 오신걸 환영합니다!!!");
         }
+
     }
+
+//    public void registHeadMember(Member newMember) {
+//
+//        int result = mr.insertHeadMember(newMember);
+//
+//        if (result == 1) {
+//            System.out.println(newMember.getNickName() + "님 포켓몬 세계에 오신걸 환영합니다!!!");
+//        }
+//    }
 
     public Member logInMember(Member logInMember) {
 
