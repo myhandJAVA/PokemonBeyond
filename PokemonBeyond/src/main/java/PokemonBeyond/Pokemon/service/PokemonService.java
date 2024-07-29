@@ -1,5 +1,6 @@
 package PokemonBeyond.Pokemon.service;
 
+import PokemonBeyond.Encyclopedia.aggregate.Encyclopedia;
 import PokemonBeyond.Pokemon.aggregate.Pokemon;
 import PokemonBeyond.Pokemon.repository.PokemonRepository;
 import PokemonBeyond.Skill.aggregate.Skill;
@@ -34,14 +35,20 @@ public class PokemonService {
         randomPokemon.setPoekmonSkill(skillService.selectRandomSkill());
         return randomPokemon;
     }
-//    public boolean isWildPokemonWin(Pokemon wildPokemon,Pokemon myPokemon, int mySkillNo){
-//        IntSupplier wildPokemonSkillNo = ()-> (int)(Math.random() * 2);
-//        Skill wildPokemonSkill = wildPokemon.getPoekmonSkill().get(wildPokemonSkillNo.getAsInt());
-//
-//        int myPokemonSkillPower = myPokemon.getPokemonPower() *
-//                myPokemon.getPoekmonSkill().get(mySkillNo).getSkillPower();
-//        if(wildPokemonSkillPower > myPokemonSkillPower) return true;
-//        else return false;
-//
-//    }
+    public boolean isWildPokemonWin(Pokemon wildPokemon,Pokemon myPokemon, int mySkillNo){
+        IntSupplier wildPokemonSkillNo = ()-> (int)(Math.random() * 2);
+        Skill wildPokemonSkill = wildPokemon.getPoekmonSkill().get(wildPokemonSkillNo.getAsInt());
+        System.out.println("야생의 " + wildPokemon.getPokemonName() + "은(는) " + wildPokemonSkill.getSkillName() +
+                "을(를) 사용했다!");
+        Skill myPokemonSkill = myPokemon.getPoekmonSkill().get(mySkillNo);
+        System.out.println(myPokemon.getPokemonName() + "은(는) " + myPokemonSkill.getSkillName() +
+                "을(를) 사용했다!");
+
+        int wildPokemonSkillPower = wildPokemonSkill.getSkillPower() * wildPokemon.getPokemonPower();
+        int myPokemonSkillPower = myPokemon.getPokemonPower() * myPokemonSkill.getSkillPower();
+
+        if(wildPokemonSkillPower > myPokemonSkillPower) return true;
+        else return false;
+
+    }
 }
