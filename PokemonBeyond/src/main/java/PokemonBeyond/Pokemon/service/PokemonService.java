@@ -34,14 +34,14 @@ public class PokemonService {
         randomPokemon.setPoekmonSkill(skillService.selectRandomSkill());
         return randomPokemon;
     }
-//    public boolean isWildPokemonWin(Pokemon wildPokemon,Pokemon myPokemon, int mySkillNo){
-//        IntSupplier wildPokemonSkillNo = ()-> (int)(Math.random() * 2);
-//        Skill wildPokemonSkill = wildPokemon.getPoekmonSkill().get(wildPokemonSkillNo.getAsInt());
-//
-//        int myPokemonSkillPower = myPokemon.getPokemonPower() *
-//                myPokemon.getPoekmonSkill().get(mySkillNo).getSkillPower();
-//        if(wildPokemonSkillPower > myPokemonSkillPower) return true;
-//        else return false;
-//
-//    }
+    public boolean isWildPokemonWin(Pokemon wildPokemon,Pokemon myPokemon, int mySkillNo){
+        IntSupplier wildPokemonSkillNo = ()-> (int)(Math.random() * 2);
+        Skill wildPokemonSkill = wildPokemon.getPoekmonSkill().get(wildPokemonSkillNo.getAsInt());
+        int wildPokemonSkillPower = wildPokemonSkill.getSkillPower() * wildPokemon.getPokemonPower();
+        int myPokemonSkillPower = myPokemon.getPokemonPower() *
+                myPokemon.getPoekmonSkill().get(mySkillNo).getSkillPower();
+        if(wildPokemonSkillPower > myPokemonSkillPower) return true;
+        else return false;
+
+    }
 }

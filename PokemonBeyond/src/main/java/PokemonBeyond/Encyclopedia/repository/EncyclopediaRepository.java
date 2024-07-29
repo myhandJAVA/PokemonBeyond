@@ -51,7 +51,7 @@ public class EncyclopediaRepository {
             pokemonNoList.add(pokemonList.get(i).getPokemonNo());
         }
         ArrayList<Encyclopedia> masterList = new ArrayList<>();
-        Encyclopedia pokemonMasterEncyc = new Encyclopedia(0, pokemonNoList);
+        Encyclopedia pokemonMasterEncyc = new Encyclopedia("PokemonMaster", pokemonNoList);
         masterList.add(pokemonMasterEncyc);
         return masterList;
     }
@@ -59,13 +59,13 @@ public class EncyclopediaRepository {
     public ArrayList<Encyclopedia> selectAllEncyclopedia(){
         return encyclopediaList;
     }
-    public Encyclopedia selectEncyclopedia(int memberNo){
+    public Encyclopedia selectEncyclopedia(String memberId){
         for (Encyclopedia encyclopedia : encyclopediaList){
-            if(encyclopedia.getMemberNo() == memberNo){
+            if(encyclopedia.getMemberId() == memberId){
                 return encyclopedia;
             }
         }
-        System.out.println("도감목록에 일치하는 회원번호 없음");
+        System.out.println("도감목록에 일치하는 회원아이디 없음");
         return null;
     }
 
@@ -100,9 +100,9 @@ public class EncyclopediaRepository {
 
     public int insertEncyclopedia(Encyclopedia encyclopedia){
         int result = 0;
-        int memberNo = encyclopedia.getMemberNo();
+        String memberId = encyclopedia.getMemberId();
         for(int i=0; i <encyclopediaList.size(); i++){
-            if(encyclopediaList.get(i).getMemberNo() == memberNo){
+            if(encyclopediaList.get(i).getMemberId() == memberId){
                 result = -1;
                 return result;
             }
@@ -132,20 +132,20 @@ public class EncyclopediaRepository {
         return result;
     }
 
-    public int deleteEncyclopedia(int memberNo){
+    public int deleteEncyclopedia(String memberId){
         int result = 0;
         boolean isInList = false;
         int deletedMemNo = -1;
         ArrayList<Encyclopedia> copiedList = (ArrayList<Encyclopedia>) encyclopediaList.clone();
         for(int i=0; i<copiedList.size();i++){
-            if(copiedList.get(i).getMemberNo() == memberNo){
+            if(copiedList.get(i).getMemberId() == memberId){
                 copiedList.remove(i);
                 isInList = true;
                 deletedMemNo = i;
             }
         }
         if(!isInList){
-            System.out.println("해당 멤버 번호가 없습니다. 다시 확인해주세요.");
+            System.out.println("해당 멤버 아이디가 없습니다. 다시 확인해주세요.");
             result = -1;
             return result;
         }
