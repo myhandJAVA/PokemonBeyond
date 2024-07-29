@@ -11,24 +11,26 @@ public class Application {
     private static final MemberService ms = new MemberService();
 
     public static void main(String[] args) {
-
         Scanner sc = new Scanner(System.in);
         while (true) {
             System.out.println("====== 회원 관리 프로그램 ======");
             System.out.println("1. 회원 가입");
             System.out.println("2. 로그인");
             System.out.print("메뉴를 선택해 주세요: ");
-
             int input = sc.nextInt();
 
             switch (input) {
-                case 1: ms.registMember(signUp()); break;
-                case 2:
+                case 1: // 회원가입
+                    ms.registMember(signUp());
+                    break;
+                case 2: // 로그인
                     Member resultMember = ms.logInMember(checkMemIdAndPwd());
                     if (resultMember != null) {
                         goMyPage(resultMember);
                     }
                     break;
+                default:
+                    System.out.println("번호를 잘못 입력하셨습니다.");
             }
         }
     }
@@ -37,6 +39,7 @@ public class Application {
 
         Scanner sc = new Scanner(System.in);
         while (true) {
+            System.out.println("\n로그인 되었습니다!");
             System.out.println("===== 회원 관리 =====");
             System.out.println("1. 회원 정보 보기");
             System.out.println("2. 회원 수정");
