@@ -2,6 +2,7 @@ package PokemonBeyond.Pokemon.service;
 
 import PokemonBeyond.Pokemon.aggregate.Pokemon;
 import PokemonBeyond.Pokemon.repository.PokemonRepository;
+import PokemonBeyond.Skill.aggregate.Skill;
 import PokemonBeyond.Skill.service.SkillService;
 
 
@@ -19,7 +20,12 @@ public class PokemonService {
     }
 
     public Pokemon findPokemon(int pokemonNo){
-        return pokemonReposiroty.selectPokemon(pokemonNo);
+        Pokemon findedPokemon =  pokemonReposiroty.selectPokemon(pokemonNo);
+        if (findedPokemon == null) {
+            System.out.println("해당 번호의 포켓몬이 존재하지 않습니다.");
+            return null;
+        }
+        return findedPokemon;
     }
     public Pokemon meetRandomPokemon(){
         ArrayList<Pokemon> pokemonList = pokemonReposiroty.selectAllpokemon();
@@ -27,5 +33,15 @@ public class PokemonService {
         Pokemon randomPokemon =  pokemonList.get(randomPokemonNo.getAsInt());
         randomPokemon.setPoekmonSkill(skillService.selectRandomSkill());
         return randomPokemon;
+    }
+    public boolean isWildPokemonWin(Pokemon wildPokemon,Pokemon myPokemon, int mySkillNo){
+        IntSupplier wildPokemonSkillNo = ()-> (int)(Math.random() * 2);
+        Skill wildPokemonSkill = wildPokemon.getPoekmonSkill().get(wildPokemonSkillNo.getAsInt());
+        int wildPokemonSkillPower = wildPokemonSkill.getSkillPower() * wildPokemon.getPokemonPower();
+        int myPokemonSkillPower = myPokemon.getPokemonPower() *
+                myPokemon.getPoekmonSkill().get(mySkillNo).getSkillPower();
+        if(wildPokemonSkillPower > myPokemonSkillPower) return true;
+        else return false;
+
     }
 }
