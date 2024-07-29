@@ -2,27 +2,25 @@ package PokemonBeyond.MonsterBall.repository;
 
 import PokemonBeyond.Member.stream.MyObjectOutput;
 import PokemonBeyond.MonsterBall.aggregate.MyPokemon;
-import PokemonBeyond.MonsterBall.service.MonsterballService;
 
 import java.io.*;
-import java.lang.reflect.Member;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.IntStream;
 
 public class MonsterBallRepository {
 
     private Map<String, ArrayList<MyPokemon>> allMebersPokemons;
     private static final String filePath = "src/main/java/PokemonBeyond/MonsterBall/db/allMebersPokemons.dat";
     private static final int MAX_POKEMON_PER_MEMBER = 6;
-    private final MonsterballService monsterballService = new MonsterballService();
 
     public MonsterBallRepository() {
-        this.allMebersPokemons = new Map<>;
+        this.allMebersPokemons = new HashMap<>();
         File file = new File(filePath);
         loadAllMembersPokemons(file);
     }
 
+    //모든 회원 리스트 로드
     private void loadAllMembersPokemons(File file) {
         if(file.exists()) {
             ObjectInputStream ois = null;
@@ -35,7 +33,7 @@ public class MonsterBallRepository {
                 allMebersPokemons = (Map<String, ArrayList<MyPokemon>>) ois.readObject();
             } catch (IOException | ClassNotFoundException e) {
                 System.out.println("파일 로딩 중 에러가 발생했습니다.");
-                allMebersPokemons = (Map<String, ArrayList<MyPokemon>>) new ArrayList<>();
+                allMebersPokemons = new HashMap<>();
             } finally {
                 if(ois != null) {
                     try {
@@ -48,18 +46,20 @@ public class MonsterBallRepository {
         }
         else {
             System.out.println("데이터 파일이 존재하지 않습니다. 새로운 리스트를 생성합니다.");
-            allMebersPokemons = (Map<String, ArrayList<MyPokemon>>) new ArrayList<>();
+            allMebersPokemons = new HashMap<>();
         }
     }
-    private int saveAllMembersPokemons(ArrayList<ArrayList<MyPokemon>> allMebersPokemons) {
+    // 모든 회원 리스트 저장
+    private int saveAllMembersPokemons(File file, Map<String ,ArrayList<MyPokemon>> allMebersPokemons) {
         ObjectOutputStream oos = null;
         int result = 0;
         try {
             oos = new ObjectOutputStream(
                     new BufferedOutputStream(
-                            new FileOutputStream(filePath)
+                            new FileOutputStream(file)
                     )
             );
+            for
             oos.writeObject(allMebersPokemons);
             System.out.println("모든 멤버의 포켓몬 정보를 저장했습니다.");
             result = 1;
@@ -85,31 +85,51 @@ public class MonsterBallRepository {
         return true;
     }
 
+    // 포켓몬 리스트에 포켓몬 추가
     // 이미 공간이 충분하다는 메서드를 통과한 이후라고 가정하고 수정할 예정
-    public int addPokemonToMember(Member selectedMember, MyPokemon pokemon) {
+    public int addPokemonToMember(String memberId, MyPokemon pokemon) {
         int result = 0;
-        ArrayList<MyPokemon> memberPokemons = allMebersPokemons.get();
-        if(ensureMaxPokemonLimit(memberPokemons)) {
+        ArrayList<MyPokemon> memberPokemons = allMebersPokemons.get(memberId);
             memberPokemons.add(pokemon);
-            saveAllMembersPokemons((ArrayList<ArrayList<MyPokemon>>) allMebersPokemons);
+            saveAllMembersPokemons(file, allMebersPokemons);
             result = 1;
+
+        return result;
+    }
+
+    public int abandonPokemon(int deleteIdx, String memberId) {
+        int result = 0;
+        ArrayList<MyPokemon> memberPokemons = select
+        int idx = 0;
+        if(memberPokemons != null) {
+            ArrayList<MyPokemon> newList = new ArrayList<>();
+            for(MyPokemon pokemon : memberPokemons) {
+                if(idx == deleteIdx) {
+                    result = 1;
+                    continue;
+                }
+                memberPokemons.add(idx, memberPokemons.get(idx));
+                idx++;
+            }
+            allMebersPokemons.put(memberId, newList);
+            File file = new File(filePath);
+            saveAllMembersPokemons(file ,allMebersPokemons);
         }
         return result;
     }
 
+    // 삭제하길 원하는 포켓몬을 새 포켓몬으로 덮어씌우는 메서드
     // 이미 공간이 불충분하다는 메서드를 통과한 이후라고 가정하고 수정할 예정
-    public int updatePokemonToMember(Member selectedMember, MyPokemon pokemon) {
+    public int updatePokemonToMember(MyPokemon pokemon, String memberId, int deleteidx) {
         int result = 0;
-        ArrayList<MyPokemon> memberPokemons = allMebersPokemons.get(selectedMember.);
-        /* 우선 기존 갖고 있는 포켓몬 중 어떤 걸 없앨지 정하는 메서드에 memberPokemons 배열을 파라미터로 넣어서
-        *  인덱스를 return 받음. 그 포켓몬을 지우고 pokemon 객체를 그 자리에 넣는다. */
-        int removeIdx = monsterballService.// 어떤 포켓몬을 없앨지 결정하는 method?
 
-
+        return result;
     }
 
-    public int insertnewMyPokemonList(ArrayList<MyPokemon> newmemberPokemons) {
-        int result = 0;
+    // 새로운 회원 리스트 생성 후 등록
+    public String creatnewMyPokemonList(String memberId) {
+        String result = "";
+        ArrayList<MyPokemon> newMemberPokemons = new ArrayList<>();
         MyObjectOutput moo = null;
         try {
             moo = new MyObjectOutput(
@@ -117,9 +137,9 @@ public class MonsterBallRepository {
                             new FileOutputStream(filePath, true)
                     )
             );
-            moo.writeObject(newmemberPokemons);
-            allMebersPokemons.add(newmemberPokemons);
-            result = 1;
+            moo.writeObject(newMemberPokemons);
+            allMebersPokemons.put(memberId, newMemberPokemons);
+            result = memberId;
         } catch (IOException e) {
             throw new RuntimeException(e);
         } finally {
@@ -132,5 +152,10 @@ public class MonsterBallRepository {
             }
         }
         return result;
+    }
+    // 포켓몬 리스트 조회
+    public ArrayList<MyPokemon> showMyPokemon(String memberId) {
+        ArrayList<MyPokemon> memberPokemons = allMebersPokemons.get(memberId);
+        return memberPokemons;
     }
 }
