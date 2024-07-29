@@ -1,18 +1,4 @@
-package PokemonBeyond.run;
 
-import PokemonBeyond.Encyclopedia.aggregate.Encyclopedia;
-import PokemonBeyond.Encyclopedia.service.EncyclopediaService;
-import PokemonBeyond.Member.aggregate.Member;
-import PokemonBeyond.Member.service.MemberService;
-import PokemonBeyond.Pokemon.aggregate.Pokemon;
-import PokemonBeyond.Pokemon.service.PokemonService;
-
-import java.util.ArrayList;
-import java.util.Scanner;
-
-public class Application {
-    static final PokemonService pokemonService = new PokemonService();
-    static final EncyclopediaService encyclopediaService = new EncyclopediaService();
 //    static final MypokemonService mypokemonService = new MypokemonService();
        static final MemberService memberService = new MemberService();
 
@@ -130,55 +116,3 @@ public class Application {
 //                                    Pokemon fightingPokemon = mypokemonService.findPokemon(loginId, toFightPokemon);
 //                                    System.out.println(fightingPokemon.getPokemonName() + "의 스킬 목록");
 //                                    System.out.println(fightingPokemon.getPoekmonSkill());
-                                    System.out.print("사용할 스킬을 선택해주세요: ");
-                                    int fightSkillNo = sc.nextInt();
-//                                    if (pokemonService.isWildPokemonWin(meetPokemon, fightingPokemon, fightSkillNo)) {
-//                                        System.out.println(fightingPokemon.getPokemonName() + "은(는) 쓰러졌다!");
-//                                    } else {
-//                                        System.out.println("야생의 " + meetPokemon.getPokemonName() + "은(는) 쓰러졌다!");
-//                                        System.out.println("신난다! " + meetPokemon.getPokemonName() + "을(를) 잡았다!");
-//                                        ArrayList<Integer> myPokemonNoList = encyclopediaService
-//                                                .getEncyclopedia(loginId).getPokemonNoInEncyclopedia();
-//                                        boolean isInEncyc = false;
-//                                        for(int pokemonNo: myPokemonNoList){
-//                                            if(pokemonNo == meetPokemon.getPokemonNo()) isInEncyc = true;
-//                                        }
-//                                        if(!isInEncyc){
-//                                            encyclopediaService.addPokemonToEncylopedia(loginId, meetPokemon.getPokemonNo());
-//                                        }
-                                    System.out.println("테스트 전투 종료");
-                                    break;
-                                case 2:
-                                    isthirdMenu = false;
-                                    break;
-                            }
-                        }
-
-                        break;
-                    case 4:
-                        System.out.println("===== 내 회원정보 =====");
-                        System.out.println("1. ???");
-                        System.out.print("메뉴 입력: ");
-                        memberInformationMenu = sc.nextInt();
-                        break;
-                    case 5:
-                        System.out.println("===== 게시판 =====");
-                        System.out.println("1. ???");
-                        System.out.print("메뉴 입력: ");
-                        communityMenu = sc.nextInt();
-                        break;
-                    case 6:
-                        System.out.println("====== 친구목록 =====");
-                        System.out.println("1. ???");
-                        System.out.print("메뉴 입력: ");
-                        friendMenu = sc.nextInt();
-                        break;
-                    case 7:
-                        return;
-                    }
-                }
-
-
-        }
-    }
-}
