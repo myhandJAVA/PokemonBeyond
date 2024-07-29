@@ -2,6 +2,7 @@ package PokemonBeyond.Pokemon.service;
 
 import PokemonBeyond.Pokemon.aggregate.Pokemon;
 import PokemonBeyond.Pokemon.repository.PokemonRepository;
+import PokemonBeyond.Skill.aggregate.Skill;
 import PokemonBeyond.Skill.service.SkillService;
 
 
@@ -33,4 +34,14 @@ public class PokemonService {
         randomPokemon.setPoekmonSkill(skillService.selectRandomSkill());
         return randomPokemon;
     }
+//    public boolean isWildPokemonWin(Pokemon wildPokemon,Pokemon myPokemon, int mySkillNo){
+//        IntSupplier wildPokemonSkillNo = ()-> (int)(Math.random() * 2);
+//        Skill wildPokemonSkill = wildPokemon.getPoekmonSkill().get(wildPokemonSkillNo.getAsInt());
+//
+//        int myPokemonSkillPower = myPokemon.getPokemonPower() *
+//                myPokemon.getPoekmonSkill().get(mySkillNo).getSkillPower();
+//        if(wildPokemonSkillPower > myPokemonSkillPower) return true;
+//        else return false;
+//
+//    }
 }
