@@ -62,9 +62,10 @@ public class test {
                     }
                     break;
                 case 8 :
-                    System.out.print("찾을 포켓몬 번호 입력: "); // null로 결과가 나올 시 안내문구 입력하기
+                    System.out.print("찾을 포켓몬 번호 입력: ");
                     int findPokemon = sc.nextInt();
-                    System.out.println(ps.findPokemon(findPokemon));
+                    Pokemon findedPokemon = ps.findPokemon(findPokemon);
+                    if(findedPokemon!=null) System.out.println(ps.findPokemon(findPokemon));
                     break;
                 case 9 :
                     return;

@@ -19,7 +19,12 @@ public class PokemonService {
     }
 
     public Pokemon findPokemon(int pokemonNo){
-        return pokemonReposiroty.selectPokemon(pokemonNo);
+        Pokemon findedPokemon =  pokemonReposiroty.selectPokemon(pokemonNo);
+        if (findedPokemon == null) {
+            System.out.println("해당 번호의 포켓몬이 존재하지 않습니다.");
+            return null;
+        }
+        return findedPokemon;
     }
     public Pokemon meetRandomPokemon(){
         ArrayList<Pokemon> pokemonList = pokemonReposiroty.selectAllpokemon();
