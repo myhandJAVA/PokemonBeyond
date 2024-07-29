@@ -13,6 +13,15 @@ public class Member implements Serializable {
     public Member() {
     }
 
+    public Member(String nickName) {
+        this.nickName = nickName;
+    }
+
+    public Member(String id, String pwd) {
+        this.id = id;
+        this.pwd = pwd;
+    }
+
     public Member(String id, String pwd, String name, int age, String nickName) {
         this.id = id;
         this.pwd = pwd;
