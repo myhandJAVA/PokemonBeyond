@@ -1,5 +1,7 @@
 package PokemonBeyond.Skill.service;
 
+import PokemonBeyond.MonsterBall.aggregate.MyPokemon;
+import PokemonBeyond.MonsterBall.service.MonsterballService;
 import PokemonBeyond.Pokemon.aggregate.Pokemon;
 import PokemonBeyond.Pokemon.service.PokemonService;
 import PokemonBeyond.Skill.aggregate.Skill;
@@ -13,8 +15,7 @@ import java.util.Random;
 public class SkillService {
 
     private final SkillRepository sr = new SkillRepository();
-    private final PokemonService ps = new PokemonService();
-//    private final MonsterBallService mb = new MonsterBallService();
+    private final MonsterballService ms = new MonsterballService();
     private final Random random = new Random();
 
     public SkillService() {
@@ -23,7 +24,7 @@ public class SkillService {
     // 조회, 저장, 수정, 삭제, 스킬랜덤추가
 
     public ArrayList<Skill> selectRandomSkill() {
-        ArrayList<Skill> skillList = sr.selectRandomSkills();
+        ArrayList<Skill> skillList = sr.selectSkills();
         ArrayList<Skill> randomSkills = new ArrayList<>();
 
         if (skillList.size() < 2) {
@@ -42,48 +43,54 @@ public class SkillService {
         return randomSkills;
     }
 
-    public void selectSkill(int id) {
+    public void selectSkill(String memberId) {
         // 회원id를 통해 몬스터볼쪽에서 어떤 포켓몬을 잡았는지 받고 각 포켓몬을 도감에서 스킬을 가져옴
-//        List<MonsterBall> catchPokemonList = mb.showMyPokemon(id);
-        Pokemon pokemonSkillList = ps.findPokemon(id);
+        ArrayList<MyPokemon> catchPokemonList = ms.showMyPokemons(memberId);
 
         // for문 돌려서 출력하게 하기
-        System.out.println("포켓몬: " + pokemonSkillList.getPokemonName() + " , 보유스킬: " + pokemonSkillList.getPoekmonSkill());
+        int i = 1;
+        for (MyPokemon myPokemon: catchPokemonList) {
+            System.out.println(i++ + ". " + "포켓몬: " + myPokemon.getPokemon().getPokemonName()
+                    + " , 보유스킬: " + myPokemon.getPokemon().getPoekmonSkill());
+        }
     }
 
-    public void saveSkill(int id, int pokemonNo) {
-        ArrayList<Skill> saveSkillList = sr.selectRandomSkills();
-//        List<MonsterBall> catchPokemonList = mb.showMyPokemon(id);
-        Pokemon pokemonSkill = ps.findPokemon(pokemonNo);
+    public void saveSkill(String memberId, int pokemonNo) {
+        ArrayList<Skill> saveSkillList = sr.selectSkills();
+        ArrayList<MyPokemon> catchPokemonList = ms.showMyPokemons(memberId);
         Skill randomSkill;
-        do {
-            int randomIndex = random.nextInt(saveSkillList.size());
-            randomSkill = saveSkillList.get(randomIndex);
-        } while (pokemonSkill.getPoekmonSkill().contains(randomSkill));
+        for(MyPokemon myPokemon: catchPokemonList) {
+            do {
+                int randomIndex = random.nextInt(saveSkillList.size());
+                randomSkill = saveSkillList.get(randomIndex);
+            } while (myPokemon.getPokemon().getPoekmonSkill().contains(randomSkill));
 
-        int randomIndex = random.nextInt(saveSkillList.size());
-        randomSkill = saveSkillList.get(randomIndex);
-        pokemonSkill.getPoekmonSkill().add(randomSkill);
-
-        System.out.println("포켓몬스킬 추가 : " + pokemonSkill.getPoekmonSkill());
-        for(Skill skill : pokemonSkill.getPoekmonSkill()) {
-            System.out.println(" Skiil: " + skill.getSkillName());
+            if(myPokemon.getPokemon().getPokemonNo() == pokemonNo) {
+                int randomIndex = random.nextInt(saveSkillList.size());
+                randomSkill = saveSkillList.get(randomIndex);
+                myPokemon.getPokemon().getPoekmonSkill().add(randomSkill);
+                System.out.println(myPokemon.getPokemon().getPokemonName() + "의 새로운 \"" + randomSkill.getSkillName() + "\" 스킬이 추가 되었습니다.");
+            }
         }
-
     }
 
-    public void deleteSkill(int id, int pokemonNo, String deleteSkillName) {
-//        List<MonsterBall> catchPokemonList = mb.showMyPokemon(id);
-        Pokemon pokemonSkill = ps.findPokemon(pokemonNo);
+    public void deleteSkill(String memberId, int pokemonNo, String deleteSkillName) {
+        ArrayList<MyPokemon> catchPokemonList = ms.showMyPokemons(memberId);
 
-        if (pokemonSkill != null) {
-            ArrayList<Skill> skills = pokemonSkill.getPoekmonSkill();
-            skills.removeIf(skill -> skill.getSkillName().equals(deleteSkillName));
+        String pokemonName = "";
+        if (catchPokemonList != null) {
+            for(MyPokemon myPokemon: catchPokemonList) {
+                if(myPokemon.getPokemon().getPokemonNo() == pokemonNo) {
+                    pokemonName = myPokemon.getName();
+                    List<Skill> skills = myPokemon.getPokemon().getPoekmonSkill();
+                    skills.removeIf(skill -> skill.getSkillName().contains(deleteSkillName));
+                }
+            }
         }
-        System.out.println(deleteSkillName + " 스킬이 삭제되었습니다.");
+        System.out.println(pokemonName + "의 " + deleteSkillName + " 스킬이 삭제되었습니다.");
     }
 
     public void updateSkill(int id) {
-
+        
     }
 }
