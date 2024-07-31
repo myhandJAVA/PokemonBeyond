@@ -63,13 +63,4 @@ public class MyPokemon implements Serializable {
     public int hashCode() {
         return Objects.hash(pokemon, name, memId);
     }
-
-    @Override
-    public String toString() {
-        return "MyPokemon{" +
-                "pokemon=" + pokemon +
-                ", name='" + name + '\'' +
-                ", memId='" + memId + '\'' +
-                '}';
-    }
 }
