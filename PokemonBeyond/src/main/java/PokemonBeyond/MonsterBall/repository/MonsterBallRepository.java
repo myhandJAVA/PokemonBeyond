@@ -49,7 +49,7 @@ public class MonsterBallRepository {
             allMebersPokemons = new HashMap<>();
         }
     }
-    // 모든 회원 리스트 저장
+    // 갱신된 리스트 저장 확인
     private int saveAllMembersPokemons(File file, Map<String ,ArrayList<MyPokemon>> allMebersPokemons) {
         ObjectOutputStream oos = null;
         int result = 0;
@@ -59,7 +59,6 @@ public class MonsterBallRepository {
                             new FileOutputStream(file)
                     )
             );
-            for
             oos.writeObject(allMebersPokemons);
             System.out.println("모든 멤버의 포켓몬 정보를 저장했습니다.");
             result = 1;
@@ -78,82 +77,50 @@ public class MonsterBallRepository {
     }
 
 
-    private boolean ensureMaxPokemonLimit(ArrayList<MyPokemon> memberPokemons) {
-        if (memberPokemons.size() >= MAX_POKEMON_PER_MEMBER) {
-            throw new IllegalStateException("멤버당 최대 " + MAX_POKEMON_PER_MEMBER + "마리의 포켓몬만 소유할 수 있습니다.");
-        }
-        return true;
-    }
+//    private boolean ensureMaxPokemonLimit(ArrayList<MyPokemon> memberPokemons) {
+//        if (memberPokemons.size() >= MAX_POKEMON_PER_MEMBER) {
+//            throw new IllegalStateException("멤버당 최대 " + MAX_POKEMON_PER_MEMBER + "마리의 포켓몬만 소유할 수 있습니다.");
+//        }
+//        return true;
+//    }
 
-    // 포켓몬 리스트에 포켓몬 추가
-    // 이미 공간이 충분하다는 메서드를 통과한 이후라고 가정하고 수정할 예정
-    public int addPokemonToMember(String memberId, MyPokemon pokemon) {
-        int result = 0;
-        ArrayList<MyPokemon> memberPokemons = allMebersPokemons.get(memberId);
-            memberPokemons.add(pokemon);
-            saveAllMembersPokemons(file, allMebersPokemons);
-            result = 1;
 
+    /* 포켓몬 리스트에 변경사항이 있으면 반영하는 메서드 */
+    public int updatePokemonList(String memberId, ArrayList<MyPokemon> updatedList) {
+        allMebersPokemons.put(memberId, updatedList);
+        File file = new File(filePath);
+        int result = saveAllMembersPokemons(file, allMebersPokemons);
         return result;
     }
 
-    public int abandonPokemon(int deleteIdx, String memberId) {
-        int result = 0;
-        ArrayList<MyPokemon> memberPokemons = select
-        int idx = 0;
-        if(memberPokemons != null) {
-            ArrayList<MyPokemon> newList = new ArrayList<>();
-            for(MyPokemon pokemon : memberPokemons) {
-                if(idx == deleteIdx) {
-                    result = 1;
-                    continue;
-                }
-                memberPokemons.add(idx, memberPokemons.get(idx));
-                idx++;
-            }
-            allMebersPokemons.put(memberId, newList);
-            File file = new File(filePath);
-            saveAllMembersPokemons(file ,allMebersPokemons);
-        }
-        return result;
-    }
-
-    // 삭제하길 원하는 포켓몬을 새 포켓몬으로 덮어씌우는 메서드
-    // 이미 공간이 불충분하다는 메서드를 통과한 이후라고 가정하고 수정할 예정
-    public int updatePokemonToMember(MyPokemon pokemon, String memberId, int deleteidx) {
-        int result = 0;
-
-        return result;
-    }
-
-    // 새로운 회원 리스트 생성 후 등록
-    public String creatnewMyPokemonList(String memberId) {
-        String result = "";
-        ArrayList<MyPokemon> newMemberPokemons = new ArrayList<>();
-        MyObjectOutput moo = null;
-        try {
-            moo = new MyObjectOutput(
-                    new BufferedOutputStream(
-                            new FileOutputStream(filePath, true)
-                    )
-            );
-            moo.writeObject(newMemberPokemons);
-            allMebersPokemons.put(memberId, newMemberPokemons);
-            result = memberId;
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } finally {
-            if(moo != null) {
-                try {
-                    moo.close();
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        }
-        return result;
-    }
-    // 포켓몬 리스트 조회
+//    /* 새로운 회원 리스트 생성 후 등록 */
+//    public String creatnewMyPokemonList(String memberId) {
+//        String result = "";
+//        ArrayList<MyPokemon> newMemberPokemons = new ArrayList<>();
+//        MyObjectOutput moo = null;
+//        try {
+//            moo = new MyObjectOutput(
+//                    new BufferedOutputStream(
+//                            new FileOutputStream(filePath, true)
+//                    )
+//            );
+//            moo.writeObject(newMemberPokemons);
+//            allMebersPokemons.put(memberId, newMemberPokemons);
+//            result = memberId;
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        } finally {
+//            if(moo != null) {
+//                try {
+//                    moo.close();
+//                } catch (IOException e) {
+//                    throw new RuntimeException(e);
+//                }
+//            }
+//        }
+//        return result;
+//    }
+    /* 포켓몬 조회하는 메서드 */
     public ArrayList<MyPokemon> showMyPokemon(String memberId) {
         ArrayList<MyPokemon> memberPokemons = allMebersPokemons.get(memberId);
         return memberPokemons;

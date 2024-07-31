@@ -13,7 +13,7 @@ public class MyPokemon implements Serializable {
     public MyPokemon() {
     }
 
-    public MyPokemon(Pokemon pokemon, String name, String memId) {
+    public MyPokemon(Pokemon pokemon, String memId) {
         this.pokemon = pokemon;
         this.name = pokemon.getPokemonName();
         this.memId = memId;
