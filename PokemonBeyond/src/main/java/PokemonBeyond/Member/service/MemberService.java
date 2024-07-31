@@ -19,7 +19,7 @@ public class MemberService {
         }
 
     }
-
+  
     public Member logInMember(Member logInMember) {
 
         // 로그인 전 확인
@@ -49,4 +49,11 @@ public class MemberService {
         mr.removeMember(member);
 
     }
+
+//    public void viewMember(Member resultMember) {           // repo까지 갈 필요 있나?
+//        System.out.println("===== 내 정보 보기 =====");
+//        System.out.println("닉네임: " + resultMember.getNickName());
+//        System.out.println("이름: " + resultMember.getName());
+//        System.out.println("나이: " + resultMember.getAge());
+//    }
 }

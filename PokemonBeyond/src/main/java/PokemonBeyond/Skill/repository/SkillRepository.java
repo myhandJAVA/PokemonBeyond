@@ -1,9 +1,11 @@
 package PokemonBeyond.Skill.repository;
 
+import PokemonBeyond.Pokemon.aggregate.Pokemon;
 import PokemonBeyond.Skill.aggregate.Skill;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.StringTokenizer;
 
 public class SkillRepository {
@@ -19,9 +21,9 @@ public class SkillRepository {
 
         saveSkills(fileOutput, skillList);
 
-        for (Skill skill : skillList) {
+//        for (Skill skill : skillList) {
 //            System.out.println("skill = " + skill);
-        }
+//        }
 
     }
 
@@ -32,15 +34,16 @@ public class SkillRepository {
         try {
             br = new BufferedReader(new FileReader(file));
             String line;
+            int i = 1;
             while ((line = br.readLine()) != null) {
                 try {
                     StringTokenizer st = new StringTokenizer(line, ",");
                     if (st.countTokens() >= 2) {
                         String skillName = st.nextToken();
                         double skillPower = Double.parseDouble(st.nextToken());
-//                        System.out.println("Loaded: " + skillName + " " + skillPower);
+//                        System.out.println("Loaded: " + skillNo + skillName + " " + skillPower);
 
-                        Skill skill = new Skill(skillName, skillPower);
+                        Skill skill = new Skill(i++, skillName, skillPower);
                         skillList.add(skill);
                     }
                 } catch (NumberFormatException e) {
@@ -67,9 +70,9 @@ public class SkillRepository {
         BufferedWriter bw = null;
         try {
             bw = new BufferedWriter(new FileWriter(fileOutput));
-
             for( Skill skill: skillList) {
-                bw.write(skill.getSkillName() + "," + skill.getSkillPower() + "\n");
+
+                bw.write(skill.getSkillNo() + "," + skill.getSkillName() + "," + skill.getSkillPower() + "\n");
             }
 
         } catch (IOException e) {
@@ -85,7 +88,8 @@ public class SkillRepository {
     }
 
 
-    public ArrayList<Skill> selectRandomSkills() {
+    public ArrayList<Skill> selectSkills() {
         return skillList;
     }
+
 }

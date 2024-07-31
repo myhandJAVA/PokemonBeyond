@@ -9,12 +9,11 @@ import java.util.List;
 
 public class MemberRepository {
 
-    private final String filePath = "src\\main/java/PokemonBeyond/Member/db/memberDB.dat";
+    private final String filePath = "src/main/java/PokemonBeyond/Member/db/memberDB.dat";
     private final File file;
     private final ArrayList<Member> memberList = new ArrayList<>();
 
     public MemberRepository() {
-
         file = new File(filePath);
         // 파일이 없는 경우
         if (!file.exists()) {
@@ -23,6 +22,31 @@ public class MemberRepository {
         }
         loadMember(file);
 
+    }
+
+    private void saveMembers(File file, ArrayList<Member> memberList) {
+        // 파일을 덮어 씌워 저장
+        ObjectOutputStream oos = null;
+        try {
+            oos = new ObjectOutputStream(
+                    new BufferedOutputStream(
+                            new FileOutputStream(file)
+                    )
+            );
+
+            /* 설명. 초기 회원 세명을 각각 객체 출력 내보내기 */
+            for(Member member: memberList) {
+                oos.writeObject(member);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                if(oos != null) oos.close();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     private void loadMember(File file) {
@@ -107,6 +131,7 @@ public class MemberRepository {
                 throw new RuntimeException(e);
             }
         }
+
         return result;
     }
 
