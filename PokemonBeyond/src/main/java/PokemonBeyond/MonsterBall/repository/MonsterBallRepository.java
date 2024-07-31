@@ -93,33 +93,30 @@ public class MonsterBallRepository {
         return result;
     }
 
-//    /* 새로운 회원 리스트 생성 후 등록 */
-//    public String creatnewMyPokemonList(String memberId) {
-//        String result = "";
-//        ArrayList<MyPokemon> newMemberPokemons = new ArrayList<>();
-//        MyObjectOutput moo = null;
-//        try {
-//            moo = new MyObjectOutput(
-//                    new BufferedOutputStream(
-//                            new FileOutputStream(filePath, true)
-//                    )
-//            );
-//            moo.writeObject(newMemberPokemons);
-//            allMebersPokemons.put(memberId, newMemberPokemons);
-//            result = memberId;
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        } finally {
-//            if(moo != null) {
-//                try {
-//                    moo.close();
-//                } catch (IOException e) {
-//                    throw new RuntimeException(e);
-//                }
-//            }
-//        }
-//        return result;
-//    }
+    /* 새로운 회원 리스트 생성 후 등록 */
+    public ArrayList<MyPokemon> addNewMyPokemonList(String memberId, ArrayList<MyPokemon> newList) {
+        MyObjectOutput moo = null;
+        try {
+            moo = new MyObjectOutput(
+                    new BufferedOutputStream(
+                            new FileOutputStream(filePath, true)
+                    )
+            );
+            moo.writeObject(newList);
+            allMebersPokemons.put(memberId, newList);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } finally {
+            if(moo != null) {
+                try {
+                    moo.close();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+        return newList;
+    }
     /* 포켓몬 조회하는 메서드 */
     public ArrayList<MyPokemon> showMyPokemon(String memberId) {
         ArrayList<MyPokemon> memberPokemons = allMebersPokemons.get(memberId);

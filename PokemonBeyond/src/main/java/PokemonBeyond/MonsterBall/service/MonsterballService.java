@@ -30,13 +30,14 @@ public class MonsterballService {
 //    }
 
     /* 최초로 계정 생성하면 무작위 포켓몬 하나를 갖고 있는 리스트를 생성하는 메서드 */
-    public void createNewMemberList(String memberId) {
-        int result = 0;
+    public ArrayList<MyPokemon> createNewMembersList(String memberId) {
+        ArrayList<MyPokemon> newmemberList;
         ArrayList<MyPokemon> newMemberList = new ArrayList<>();
         Pokemon FirstPokemon = pokemonService.meetRandomPokemon();
         MyPokemon startingPokemon = new MyPokemon(FirstPokemon, memberId);
         newMemberList.add(startingPokemon);
-        result = monsterBallRepository.updatePokemonList(memberId, newMemberList);
+        newmemberList = monsterBallRepository.addNewMyPokemonList(memberId, newMemberList);
+        return newmemberList;
     }
     // 덜 찼을 때에도 null값으로 되어있을 테니 거기다가 넣고
     // 꽉 찼을 때 새로운 포켓몬을 만났을 경우 특정 인덱스 포켓몬을 버리고 그 인덱스에 넣는 거에도 사용
@@ -74,17 +75,17 @@ public class MonsterballService {
         }
         int result = monsterBallRepository.updatePokemonList(memberId, newList);
         if(result == 1) {
-            System.out.println("오박사님께 " + abandonPokemon + "을 성공적으로 보냈습니다!");
+            System.out.println("오박사님께 " + abandonPokemon + "을(를) 성공적으로 보냈습니다!");
         }
-        else System.out.println("오박사님께서 " + abandonPokemon + "을 거부하셨습니다..");
+        else System.out.println("오박사님께서 " + abandonPokemon + "을(를) 거부하셨습니다..");
     }
 
     /* 포켓몬 이름 바꾸는 메서드 */
-    public int changePokemonName(int pokemonIdx, String memberId, String name) {
+    public void changePokemonName(int pokemonIdx, String memberId, String name) {
         int result = 0;
         if(pokemonIdx < 0 || pokemonIdx >= 6) {
             System.out.println("잘못된 포켓몬 번호입니다");
-            return result;
+            return;
         }
         ArrayList<MyPokemon> currentList = monsterBallRepository.showMyPokemon(memberId);
         // 새로운 MyPokemon 인스턴스 생성 후 값 이름빼고 다 복사
@@ -97,9 +98,39 @@ public class MonsterballService {
         currentList.set(pokemonIdx, newnamePokemon);
         // 리스트 갱신
         result = monsterBallRepository.updatePokemonList(memberId, currentList);
-        if(result == 1) System.out.println(oldnamePokemon.getName() + "이 " +
-                name + "으로 바뀌었습니다!");
+        if(result == 1) System.out.println(oldnamePokemon.getName() + "이(가) " +
+                name + "(으)로 바뀌었습니다!");
         else System.out.println("이름 변경에 실패했습니다..");
-        return result;
+    }
+
+    /* 포켓몬 리스트 조회하기 눌렀을 때 String으로 출력하는 메서드 */
+    public String inquiryMyPokemon(String memberId) {
+        ArrayList<MyPokemon> memberPokemonList
+                = monsterBallRepository.showMyPokemon(memberId);
+        // 조회가 안 되면 생성
+        if(memberPokemonList == null) memberPokemonList = createNewMembersList(memberId);
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < memberPokemonList.size(); i++) {
+            MyPokemon myPokemon = memberPokemonList.get(i);
+            if(myPokemon != null) {
+                sb.append((i + 1) + ". " + myPokemon.getName() + " ");
+            }
+        }
+        return sb.toString();
+    }
+
+    /* 포켓몬 리스트를 출력하는 메서드 */
+    public ArrayList<MyPokemon> showMyPokemon(String memberId) {
+        ArrayList<MyPokemon> selectedList = monsterBallRepository.showMyPokemon(memberId);
+        // 조회되는 게 없다면 생성해서 출력
+        if(selectedList == null) {
+            selectedList = createNewMembersList(memberId);
+        }
+        return selectedList;
+    }
+
+    /* 현재 포켓몬 리스트 크기를 가져오는 메서드 */
+    public int getPokemonCount(String memberId) {
+        return monsterBallRepository.showMyPokemon(memberId).size();
     }
 }

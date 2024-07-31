@@ -1,13 +1,12 @@
 package PokemonBeyond.run;
 
-import PokemonBeyond.Encyclopedia.aggregate.Encyclopedia;
 import PokemonBeyond.Encyclopedia.service.EncyclopediaService;
 import PokemonBeyond.Member.aggregate.Member;
 import PokemonBeyond.Member.service.MemberService;
+import PokemonBeyond.MonsterBall.run.MonsterballApplication;
 import PokemonBeyond.Pokemon.aggregate.Pokemon;
 import PokemonBeyond.Pokemon.service.PokemonService;
 
-import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Application {
@@ -15,11 +14,12 @@ public class Application {
     static final EncyclopediaService encyclopediaService = new EncyclopediaService();
     //    static final MypokemonService mypokemonService = new MypokemonService();
     static final MemberService memberService = new MemberService();
+    static final MonsterballApplication monsterballApplication = new MonsterballApplication();
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         boolean isFirstMenu = true;
-
+        String memberId = "";
         while(isFirstMenu){
             System.out.println("=====PokemonBeyond=====");
             System.out.println("1. 회원가입");
@@ -48,10 +48,10 @@ public class Application {
                     sc.nextLine();
                     System.out.println("로그인에 필요한 정보를 입력하세요.");
                     System.out.print("아이디: ");
-                    String loginId = sc.nextLine();
+                    memberId = sc.nextLine();
                     System.out.print("비밀번호: ");
                     String loginPwd = sc.nextLine();
-                    Member loginedMember = memberService.logInMember(new Member(loginId,loginPwd));
+                    Member loginedMember = memberService.logInMember(new Member(memberId,loginPwd));
                     if (loginedMember!=null)  isFirstMenu = false;
 
                     break;
@@ -107,11 +107,8 @@ public class Application {
                         }
 
                         break;
-                    case 2:
-                        System.out.println("===== 내 포켓몬 =====");
-                        System.out.println("1. ???");
-                        System.out.print("원하는 메뉴를 선택하세요: ");
-                        myPokemonMenu = sc.nextInt();
+                    case 2:   ///// monsterballApplication
+                        monsterballApplication.run(memberId);
                         break;
                     case 3:
                         while (isthirdMenu) {
