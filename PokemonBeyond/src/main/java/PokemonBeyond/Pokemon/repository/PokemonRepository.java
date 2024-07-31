@@ -10,7 +10,7 @@ public class PokemonRepository {
     private ArrayList<Pokemon> pokemonList;
 
     public PokemonRepository(){
-        File pokemonFile = new File("PokemonBeyond/src/main/java/PokemonBeyond/Pokemon/db/pokemon.dat");
+        File pokemonFile = new File("src/main/java/PokemonBeyond/Pokemon/db/pokemon.dat");
         loadPokemonArrayList(pokemonFile);
     }
 

@@ -28,9 +28,9 @@ public class PokemonService {
         return findedPokemon;
     }
     public Pokemon meetRandomPokemon(){
-        ArrayList<Pokemon> pokemonList = pokemonReposiroty.selectAllpokemon();
-        IntSupplier randomPokemonNo = ()-> (int)(Math.random() * pokemonList.size())+1;
-        Pokemon randomPokemon =  pokemonList.get(randomPokemonNo.getAsInt());
+        ArrayList<Pokemon> allpokemon = pokemonReposiroty.selectAllpokemon();
+        IntSupplier randomPokemonNo = ()-> (int)(Math.random() * allpokemon.size())+1;
+        Pokemon randomPokemon =  allpokemon.get(randomPokemonNo.getAsInt());
         randomPokemon.setPoekmonSkill(skillService.selectRandomSkill());
         return randomPokemon;
     }
