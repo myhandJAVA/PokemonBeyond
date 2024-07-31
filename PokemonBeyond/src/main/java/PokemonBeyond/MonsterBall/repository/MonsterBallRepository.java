@@ -12,7 +12,6 @@ public class MonsterBallRepository {
 
     private Map<String, ArrayList<MyPokemon>> allMebersPokemons;
     private static final String filePath = "src/main/java/PokemonBeyond/MonsterBall/db/allMebersPokemons.dat";
-    private static final int MAX_POKEMON_PER_MEMBER = 6;
 
     public MonsterBallRepository() {
         this.allMebersPokemons = new HashMap<>();
@@ -118,7 +117,7 @@ public class MonsterBallRepository {
         return newList;
     }
     /* 포켓몬 조회하는 메서드 */
-    public ArrayList<MyPokemon> showMyPokemon(String memberId) {
+    public ArrayList<MyPokemon> selectMyPokemon(String memberId) {
         ArrayList<MyPokemon> memberPokemons = allMebersPokemons.get(memberId);
         return memberPokemons;
     }
