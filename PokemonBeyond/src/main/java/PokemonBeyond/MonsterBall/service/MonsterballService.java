@@ -16,7 +16,7 @@ public class MonsterballService {
     }
 
     // 조회를 통해 내 포켓몬을 삭제할지, 이름을 변경할지 정할 수 있다.
-//    public ArrayList<MyPokemon> selectMyPokemons(String memId) {
+//    public ArrayList<MyPokemon> selectMyPokemon(String memId) {
 //        ArrayList<MyPokemon> oldlist = monsterBallRepository.showMyPokemon(memId);
 //        int result = 0;
 //        if (oldlist != null) {
@@ -43,7 +43,7 @@ public class MonsterballService {
     // 꽉 찼을 때 새로운 포켓몬을 만났을 경우 특정 인덱스 포켓몬을 버리고 그 인덱스에 넣는 거에도 사용
     /* 새로운 포켓몬을 저장하는 메서드 */
     public int addnewPokemon(MyPokemon newPokemon, String memberId) {
-        ArrayList<MyPokemon> currentList = monsterBallRepository.showMyPokemon(memberId);
+        ArrayList<MyPokemon> currentList = monsterBallRepository.selectMyPokemon(memberId);
         int result = 0;
 
         if (currentList.size() < 6) {
@@ -61,8 +61,8 @@ public class MonsterballService {
     /* 오박사님께 보내는 메서드 */
     public void modifyPokemon(String memberId, int deleteIdx) {
         String abandonPokemon =
-                monsterBallRepository.showMyPokemon(memberId).get(deleteIdx).getName();
-        ArrayList<MyPokemon> oldList = monsterBallRepository.showMyPokemon(memberId);
+                monsterBallRepository.selectMyPokemon(memberId).get(deleteIdx).getName();
+        ArrayList<MyPokemon> oldList = monsterBallRepository.selectMyPokemon(memberId);
         if(oldList.size() == 1) {
             System.out.println("포켓몬은 최소 1마리 이상 보유해야 합니다!");
             return;
@@ -87,7 +87,7 @@ public class MonsterballService {
             System.out.println("잘못된 포켓몬 번호입니다");
             return;
         }
-        ArrayList<MyPokemon> currentList = monsterBallRepository.showMyPokemon(memberId);
+        ArrayList<MyPokemon> currentList = monsterBallRepository.selectMyPokemon(memberId);
         // 새로운 MyPokemon 인스턴스 생성 후 값 이름빼고 다 복사
         MyPokemon oldnamePokemon = currentList.get(pokemonIdx);
         MyPokemon newnamePokemon = new MyPokemon();
@@ -106,7 +106,7 @@ public class MonsterballService {
     /* 포켓몬 리스트 조회하기 눌렀을 때 String으로 출력하는 메서드 */
     public String inquiryMyPokemon(String memberId) {
         ArrayList<MyPokemon> memberPokemonList
-                = monsterBallRepository.showMyPokemon(memberId);
+                = monsterBallRepository.selectMyPokemon(memberId);
         // 조회가 안 되면 생성
         if(memberPokemonList == null) memberPokemonList = createNewMembersList(memberId);
         StringBuilder sb = new StringBuilder();
@@ -121,7 +121,7 @@ public class MonsterballService {
 
     /* 포켓몬 리스트를 출력하는 메서드 */
     public ArrayList<MyPokemon> showMyPokemon(String memberId) {
-        ArrayList<MyPokemon> selectedList = monsterBallRepository.showMyPokemon(memberId);
+        ArrayList<MyPokemon> selectedList = monsterBallRepository.selectMyPokemon(memberId);
         // 조회되는 게 없다면 생성해서 출력
         if(selectedList == null) {
             selectedList = createNewMembersList(memberId);
@@ -131,6 +131,6 @@ public class MonsterballService {
 
     /* 현재 포켓몬 리스트 크기를 가져오는 메서드 */
     public int getPokemonCount(String memberId) {
-        return monsterBallRepository.showMyPokemon(memberId).size();
+        return monsterBallRepository.selectMyPokemon(memberId).size();
     }
 }
