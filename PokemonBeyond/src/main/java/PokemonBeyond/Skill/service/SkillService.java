@@ -45,7 +45,7 @@ public class SkillService {
 
     public void selectSkill(String memberId) {
         // 회원id를 통해 몬스터볼쪽에서 어떤 포켓몬을 잡았는지 받고 각 포켓몬을 도감에서 스킬을 가져옴
-        ArrayList<MyPokemon> catchPokemonList = ms.showMyPokemons(memberId);
+        ArrayList<MyPokemon> catchPokemonList = ms.showMyPokemon(memberId);
 
         // for문 돌려서 출력하게 하기
         int i = 1;
@@ -57,7 +57,7 @@ public class SkillService {
 
     public void saveSkill(String memberId, int pokemonNo) {
         ArrayList<Skill> saveSkillList = sr.selectSkills();
-        ArrayList<MyPokemon> catchPokemonList = ms.showMyPokemons(memberId);
+        ArrayList<MyPokemon> catchPokemonList = ms.showMyPokemon(memberId);
         Skill randomSkill;
         for(MyPokemon myPokemon: catchPokemonList) {
             do {
@@ -75,7 +75,7 @@ public class SkillService {
     }
 
     public void deleteSkill(String memberId, int pokemonNo, String deleteSkillName) {
-        ArrayList<MyPokemon> catchPokemonList = ms.showMyPokemons(memberId);
+        ArrayList<MyPokemon> catchPokemonList = ms.showMyPokemon(memberId);
 
         String pokemonName = "";
         if (catchPokemonList != null) {
