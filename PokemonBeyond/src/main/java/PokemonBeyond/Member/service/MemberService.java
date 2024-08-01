@@ -5,7 +5,7 @@ import PokemonBeyond.Member.repository.MemberRepository;
 
 public class MemberService {
 
-    private final MemberRepository mr = new MemberRepository();
+    private MemberRepository mr = new MemberRepository();
 
     public MemberService() {
     }
@@ -19,16 +19,7 @@ public class MemberService {
         }
 
     }
-
-//    public void registHeadMember(Member newMember) {
-//
-//        int result = mr.insertHeadMember(newMember);
-//
-//        if (result == 1) {
-//            System.out.println(newMember.getNickName() + "님 포켓몬 세계에 오신걸 환영합니다!!!");
-//        }
-//    }
-
+  
     public Member logInMember(Member logInMember) {
 
         // 로그인 전 확인
@@ -42,33 +33,21 @@ public class MemberService {
         return null;
     }
 
-    public void findMemberBy(Member memberNickName) {
-
-        Member selectedMember = mr.selectMemberBy(memberNickName);
-
-        if (selectedMember != null) {
-            System.out.println("조회된 회원은: "+selectedMember.getNickName()+" 입니다.");
-        } else {
-            System.out.println("그런 회원은 없네요 ㅠㅠ");
+    public Member searchMember(String nickName) {
+        Member member = mr.findMemberNickname(nickName);
+        if (member == null) {
+            System.out.println("일치하는 회원이 없습니다.");
         }
+        return member;
     }
 
-    public void removeMember(Member resultMember) {
-        int result = mr.deleteMember(resultMember);
-        if (result == 1) {
-            System.out.println("언제든 포켓몬 세계로 돌아오십쇼!");
-        }
-
+    public void modifyMember(Member member) {
+        mr.updateMember(member);
     }
 
-    public void modifyMember(Member reform) {
-        int result = mr.updateMember(reform);
-        if (result == 1) {
-            System.out.println("수정 성공!");
-            return;
-        }
+    public void exitMember(Member member) {
+        mr.removeMember(member);
 
-        System.out.println("수정 내역 없음");
     }
 
 //    public void viewMember(Member resultMember) {           // repo까지 갈 필요 있나?
