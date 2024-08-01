@@ -26,6 +26,7 @@ public class Application {
                 case 2: // 로그인
                     Member resultMember = ms.logInMember(checkMemIdAndPwd());
                     if (resultMember != null) {
+                        System.out.println("로그인 되었습니다!");
                         goMyPage(resultMember);
                     }
                     break;
@@ -39,8 +40,7 @@ public class Application {
 
         Scanner sc = new Scanner(System.in);
         while (true) {
-            System.out.println("\n로그인 되었습니다!");
-            System.out.println("===== 회원 관리 =====");
+            System.out.println("\n===== 회원 관리 =====");
             System.out.println("1. 회원 정보 보기");
             System.out.println("2. 회원 수정");
             System.out.println("3. 회원 찾기");
@@ -52,24 +52,35 @@ public class Application {
 
             switch (input) {
                 case 1:
-//                    ms.viewMember(resultMember); break;
                     goViewMember(resultMember);
+                    break;
                 case 2: ms.modifyMember(reform(resultMember)); break;
-                case 3: ms.findMemberBy(chooseMemNickName()); break;
+                case 3:
+                    sc.nextLine();
+                    System.out.println("회원 닉네임을 입력하세요: ");
+                    String nickName = sc.nextLine();
+                    Member searchedMember = ms.searchMember(nickName);
+                    System.out.println("결과: " + searchedMember.getNickName());
+                    break;
                 case 4:
                     sc.nextLine();
-                    System.out.print("정말 삭제하시겠습니까?(Y/N): ");
-                    String answer = sc.nextLine().toUpperCase();
-                    if (answer.equals("Y")) {
-                        ms.removeMember(resultMember);
-                        return;
-                    } else if (answer.equals("N")) {
-                        goMyPage(resultMember);
-                    } else {
-                        System.out.println("잘못 입력하셨습니다.");
+                    System.out.println("정말로 탈퇴하시겠습니까?(Y/N): ");
+                    while(true){
+                        String answer = sc.nextLine().toUpperCase();
+                        if(answer.equals("Y")){
+                            ms.exitMember(resultMember);
+                            return;
+                        } else if (answer.equals("N")){
+                            break;
+                        } else {
+                            System.out.println("잘못 입력하셨습니다.");
+                            break;
+                        }
                     }
                     break;
                 case 5: return;         // 다른거 더 들어갔다가 로그아웃하면 바로 로그아웃 안된다...
+                default:
+                    System.out.println("번호를 잘못 입력하셨습니다.");
             }
         }
     }
@@ -79,7 +90,7 @@ public class Application {
         Scanner sc = new Scanner(System.in);
 
         while (true) {
-            System.out.println("==== 수정할 목록 ====");
+            System.out.println("\n==== 수정할 목록 ====");
             System.out.println("1. 패스워드");
             System.out.println("2. 닉네임");
             System.out.println("3. 나이");
@@ -119,9 +130,10 @@ public class Application {
         System.out.println("나이: " + resultMember.getAge());
         System.out.println();
         System.out.print("돌아가시겠습니까?(Y/N): ");
+        System.out.println();
         String answer = sc.nextLine().toUpperCase();
         if (answer.equals("Y")) {
-            goMyPage(resultMember);
+            // 그냥 돌아간다.
         } else if (answer.equals("N")) {
             goViewMember(resultMember);
         } else {

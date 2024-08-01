@@ -5,6 +5,7 @@ import PokemonBeyond.Encyclopedia.repository.EncyclopediaRepository;
 import PokemonBeyond.Pokemon.aggregate.Pokemon;
 import PokemonBeyond.Pokemon.service.PokemonService;
 
+import java.io.File;
 import java.util.ArrayList;
 
 public class EncyclopediaService {
@@ -57,14 +58,26 @@ public class EncyclopediaService {
     public void addEncyclopedia(String memberId,Pokemon pokemon){
         ArrayList<Integer> pokemonNoList = new ArrayList<>();
         pokemonNoList.add(pokemon.getPokemonNo());
-        encyclopediaRepository.insertEncyclopedia(new Encyclopedia(memberId,pokemonNoList));
+        if(encyclopediaRepository.getEncyclopediaList().isEmpty()){
+            ArrayList<Encyclopedia> newEncycList = new ArrayList<>();
+            newEncycList.add(new Encyclopedia(memberId,pokemonNoList));
+            encyclopediaRepository.saveEncyclopedia(newEncycList,
+                    new File("src/main/java/PokemonBeyond/Encyclopedia/db/encyclopedia.dat"));
+        } else {
+            encyclopediaRepository.insertEncyclopedia(new Encyclopedia(memberId, pokemonNoList));
+        }
     }
+
     public void removeEncyclopedia(String memberId){
        int result = 1;
        result = encyclopediaRepository.deleteEncyclopedia(memberId);
        if(result == 1){
            System.out.println("도감이 정상적으로 삭제되었습니다.");
        } else System.out.println("오류가 생겨 도감이 삭제되지 않았습니다.");
+    }
+
+    public Encyclopedia getEncyclopedia(String memberId){
+        return encyclopediaRepository.selectEncyclopedia(memberId);
     }
 
 }

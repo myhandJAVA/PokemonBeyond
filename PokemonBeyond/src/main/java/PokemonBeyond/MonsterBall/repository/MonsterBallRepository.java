@@ -10,18 +10,22 @@ import java.util.Map;
 
 public class MonsterBallRepository {
 
-    private Map<String, ArrayList<MyPokemon>> allMebersPokemons;
-    private static final String filePath = "src/main/java/PokemonBeyond/MonsterBall/db/allMebersPokemons.dat";
+    private Map<String, ArrayList<MyPokemon>> allMebmersPokemons = new HashMap<>();
+    private static final String filePath = "src/main/java/PokemonBeyond/MonsterBall/db/allMebmersPokemons.dat";
+    private final File file;
 
     public MonsterBallRepository() {
-        this.allMebersPokemons = new HashMap<>();
-        File file = new File(filePath);
+        file = new File(filePath);
+
+        if(!file.exists()) {
+            saveAllMembersPokemons(file, new HashMap<String, ArrayList<MyPokemon>>());
+            System.out.println("새로운 파일을 생성했습니다.");
+        }
         loadAllMembersPokemons(file);
     }
 
     //모든 회원 리스트 로드
     private void loadAllMembersPokemons(File file) {
-        if(file.exists()) {
             ObjectInputStream ois = null;
             try {
                 ois = new ObjectInputStream(
@@ -29,10 +33,10 @@ public class MonsterBallRepository {
                                 new FileInputStream(file)
                         )
                 );
-                allMebersPokemons = (Map<String, ArrayList<MyPokemon>>) ois.readObject();
+                allMebmersPokemons = (Map<String, ArrayList<MyPokemon>>) ois.readObject();
             } catch (IOException | ClassNotFoundException e) {
                 System.out.println("파일 로딩 중 에러가 발생했습니다.");
-                allMebersPokemons = new HashMap<>();
+                allMebmersPokemons = new HashMap<>();
             } finally {
                 if(ois != null) {
                     try {
@@ -42,11 +46,6 @@ public class MonsterBallRepository {
                     }
                 }
             }
-        }
-        else {
-            System.out.println("데이터 파일이 존재하지 않습니다. 새로운 리스트를 생성합니다.");
-            allMebersPokemons = new HashMap<>();
-        }
     }
     // 갱신된 리스트 저장 확인
     private int saveAllMembersPokemons(File file, Map<String ,ArrayList<MyPokemon>> allMebersPokemons) {
@@ -86,9 +85,9 @@ public class MonsterBallRepository {
 
     /* 포켓몬 리스트에 변경사항이 있으면 반영하는 메서드 */
     public int updatePokemonList(String memberId, ArrayList<MyPokemon> updatedList) {
-        allMebersPokemons.put(memberId, updatedList);
+        allMebmersPokemons.put(memberId, updatedList);
         File file = new File(filePath);
-        int result = saveAllMembersPokemons(file, allMebersPokemons);
+        int result = saveAllMembersPokemons(file, allMebmersPokemons);
         return result;
     }
 
@@ -102,7 +101,7 @@ public class MonsterBallRepository {
                     )
             );
             moo.writeObject(newList);
-            allMebersPokemons.put(memberId, newList);
+            allMebmersPokemons.put(memberId, newList);
         } catch (IOException e) {
             throw new RuntimeException(e);
         } finally {
@@ -118,7 +117,7 @@ public class MonsterBallRepository {
     }
     /* 포켓몬 조회하는 메서드 */
     public ArrayList<MyPokemon> selectMyPokemon(String memberId) {
-        ArrayList<MyPokemon> memberPokemons = allMebersPokemons.get(memberId);
+        ArrayList<MyPokemon> memberPokemons = allMebmersPokemons.get(memberId);
         return memberPokemons;
     }
 }

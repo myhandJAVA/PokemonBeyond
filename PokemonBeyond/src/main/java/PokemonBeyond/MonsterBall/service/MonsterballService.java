@@ -10,7 +10,6 @@ import java.util.ArrayList;
 public class MonsterballService {
 
     private final MonsterBallRepository monsterBallRepository = new MonsterBallRepository();
-    private final PokemonService pokemonService = new PokemonService();
 
     public MonsterballService() {
     }
@@ -31,6 +30,8 @@ public class MonsterballService {
 
     /* 최초로 계정 생성하면 무작위 포켓몬 하나를 갖고 있는 리스트를 생성하는 메서드 */
     public ArrayList<MyPokemon> createNewMembersList(String memberId) {
+        // 필요할 때만 PokemonService를 호출해서 무한 재귀 호출을 방지
+        PokemonService pokemonService = new PokemonService();
         ArrayList<MyPokemon> newmemberList;
         ArrayList<MyPokemon> newMemberList = new ArrayList<>();
         Pokemon FirstPokemon = pokemonService.meetRandomPokemon();

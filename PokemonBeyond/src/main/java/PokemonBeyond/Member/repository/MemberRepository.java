@@ -5,6 +5,7 @@ import PokemonBeyond.Member.stream.MyObjectOutput;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.List;
 
 public class MemberRepository {
 
@@ -77,6 +78,7 @@ public class MemberRepository {
 
     }
 
+
     public boolean insertMember(Member newMember) {
         // 파일에 이어붙여 저장
         MyObjectOutput moo = null;
@@ -106,34 +108,36 @@ public class MemberRepository {
                 throw new RuntimeException(e);
             }
         }
+
         return result;
     }
 
-    public int insertHeadMember(Member newMember) {
-
-        ObjectOutputStream oos = null;
-        int result = 0;
-        try {
-            oos = new ObjectOutputStream(
-                    new BufferedOutputStream(
-                            new FileOutputStream("src/main/java/PokemonBeyond/Member/db/memberDB.dat"
-                                                , true)
-                    )
-            );
-
-            oos.writeObject(newMember);
-            memberList.add(newMember);
-            result = 1;
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } finally {
-            try {
-                if(oos != null) oos.close();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+    public Member findMemberId(String id) {
+        for (Member member : memberList) {
+            if (member.getId().equals(id)) {
+                return member;
             }
         }
-        return result;
+        return null;
+    }
+
+    public Member findMemberNickname(String nickName) {
+        for (Member member : memberList) {
+            if (member.getNickName().equals(nickName)) {
+                return member;
+            }
+        }
+        return null;
+    }
+
+    public void updateMember(Member member) {
+        Member Member = findMemberId(member.getId());
+
+        Member.setPwd(member.getPwd());
+        Member.setName(member.getName());
+        Member.setAge(member.getAge());
+        Member.setNickName(member.getNickName());
+        saveMembers(file, memberList);
     }
 
 
@@ -148,43 +152,11 @@ public class MemberRepository {
         return null;
     }
 
-    public Member selectMemberBy(Member memberNickName) {
-        for (Member member: memberList) {
-            if (memberNickName.equals(member.getNickName())) {
-                return member;
-            }
-        } return null;
+    public void removeMember(Member member) {
+        memberList.remove(member);
+        System.out.println("포켓몬 세계는 언제나 당신을 기다립니다.");
+
+        saveMembers(file, memberList);
+
     }
-
-
-    public int deleteMember(Member resultMember) {
-        int result = 0;
-        for (Member member : memberList) {
-            if (member.getId().equals(resultMember.getId())) {
-                member.setId(null);
-            }
-        }
-        result = 1;
-        return result;
-    }
-
-    public int updateMember(Member reform) {
-        for (int i = 0; i < memberList.size(); i++) {
-            Member iMember = memberList.get(i);
-            if(iMember.getId() == reform.getId()){
-                System.out.println("===== 수정 전 기존 회원 정보와의 비교 =====");
-                System.out.println("reform = " + reform);
-                System.out.println("iMember = " + iMember);
-
-                memberList.set(i, reform);
-
-                File file = new File("src/main/java/com/ohgiraffers/section04/testapp/db/memberDB.dat");
-                saveMembers(file, memberList);
-
-                if(!iMember.equals(reform)) return 1;
-            }
-        }
-        return 0;
-    }
-
 }
