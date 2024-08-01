@@ -10,13 +10,14 @@ public class MemberService {
     public MemberService() {
     }
 
-    public void registMember(Member newMember) {
+    public String registMember(Member newMember) {
 
         boolean result = mr.insertMember(newMember);
 
         if (result == true) {
             System.out.println(newMember.getNickName() + "님 포켓몬 세계에 오신걸 환영합니다!!!");
         }
+        return newMember.getId();
 
     }
   
