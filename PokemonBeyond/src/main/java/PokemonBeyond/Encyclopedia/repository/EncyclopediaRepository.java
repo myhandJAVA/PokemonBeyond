@@ -21,7 +21,7 @@ public class EncyclopediaRepository {
         loadEncyclopediaList();
     }
 
-    private void saveEncyclopedia(ArrayList<Encyclopedia> encycList ,File file) {
+    public void saveEncyclopedia(ArrayList<Encyclopedia> encycList ,File file) {
         ObjectOutputStream ois = null;
         try {
             ois = new ObjectOutputStream(
@@ -61,7 +61,7 @@ public class EncyclopediaRepository {
     }
     public Encyclopedia selectEncyclopedia(String memberId){
         for (Encyclopedia encyclopedia : encyclopediaList){
-            if(encyclopedia.getMemberId() == memberId){
+            if(encyclopedia.getMemberId().equals(memberId)){
                 return encyclopedia;
             }
         }
@@ -102,7 +102,7 @@ public class EncyclopediaRepository {
         int result = 0;
         String memberId = encyclopedia.getMemberId();
         for(int i=0; i <encyclopediaList.size(); i++){
-            if(encyclopediaList.get(i).getMemberId() == memberId){
+            if(encyclopediaList.get(i).getMemberId().equals( memberId)){
                 result = -1;
                 return result;
             }
@@ -138,7 +138,7 @@ public class EncyclopediaRepository {
         int deletedMemNo = -1;
         ArrayList<Encyclopedia> copiedList = (ArrayList<Encyclopedia>) encyclopediaList.clone();
         for(int i=0; i<copiedList.size();i++){
-            if(copiedList.get(i).getMemberId() == memberId){
+            if(copiedList.get(i).getMemberId().equals(memberId)){
                 copiedList.remove(i);
                 isInList = true;
                 deletedMemNo = i;

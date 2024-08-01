@@ -77,30 +77,7 @@ public class MemberRepository {
         }
 
     }
-    private void saveMembers(File file, ArrayList<Member> memberList) {
-        // 파일을 덮어 씌워 저장
-        ObjectOutputStream oos = null;
-        try {
-            oos = new ObjectOutputStream(
-                    new BufferedOutputStream(
-                            new FileOutputStream(file)
-                    )
-            );
 
-            /* 설명. 초기 회원 세명을 각각 객체 출력 내보내기 */
-            for(Member member: memberList) {
-                oos.writeObject(member);
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } finally {
-            try {
-                if(oos != null) oos.close();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
-    }
 
     public boolean insertMember(Member newMember) {
         // 파일에 이어붙여 저장
