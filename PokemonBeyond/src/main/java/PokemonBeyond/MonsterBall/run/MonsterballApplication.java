@@ -27,7 +27,23 @@ public class MonsterballApplication {
             int firstOption = sc.nextInt();
             switch (firstOption) {
                 case 1:
-                    System.out.println(monsterballService.inquiryMyPokemon(memberId));
+                        System.out.println(monsterballService.inquiryMyPokemon(memberId));
+                        maxPokemonIndex = monsterballService.getPokemonCount(memberId);
+                        int choiceIdx = -1;
+                        while (choiceIdx < 0 || choiceIdx >= maxPokemonIndex) {
+                            System.out.println("상세 정보를 보고싶은 포켓몬의 번호를 입력해주세요 : ");
+                            try {
+                                choiceIdx = sc.nextInt() - 1;
+                                if (choiceIdx < 0 || choiceIdx >= maxPokemonIndex) {
+                                    System.out.println("올바르지 않은 번호입니다. 다시 입력해주세요.");
+                                }
+                            } catch (java.util.InputMismatchException e) {
+                                System.out.println("숫자를 입력해주세요.");
+                                sc.next();
+                            }
+                        }
+                        MyPokemon selectedPokemon = monsterballService.selectMyPokemon(memberId, choiceIdx);
+                        System.out.println(selectedPokemon);
                     break;
                 case 2:
                     System.out.println(monsterballService.inquiryMyPokemon(memberId));
@@ -70,6 +86,8 @@ public class MonsterballApplication {
                     monsterballService.modifyPokemon(memberId, deleteIdx);
                     break;
                 case 4:
+                    // 포켓몬 조회를 나가면 리스트 자동저장 및 갱신
+                    monsterballService.autoFileSave(memberId);
                     return;
             }
         }
