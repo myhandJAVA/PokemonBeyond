@@ -50,7 +50,7 @@ public class Application {
 
 //        ss.deleteSkill("user01", 1, "몸통박치기", arr);
 
-        ss.selectSkill("user01", arr);
+        ss.selectSkill("user01");
 
 //        ss.saveSkill("user01", 1, arr);
 

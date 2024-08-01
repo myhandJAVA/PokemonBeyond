@@ -89,6 +89,7 @@ public class Application {
                             System.out.println("2. 도감 상세 조회");
                             System.out.println("3. 뒤로 가기");
                             System.out.print("원하는 메뉴를 선택하세요: ");
+
                             encyclopediaMenu = sc.nextInt();
                             switch (encyclopediaMenu) {
                                 case 1:
