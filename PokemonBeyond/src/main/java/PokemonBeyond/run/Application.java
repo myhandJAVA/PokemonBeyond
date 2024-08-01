@@ -16,7 +16,7 @@ import java.util.Scanner;
 public class Application {
     static final PokemonService pokemonService = new PokemonService();
     static final EncyclopediaService encyclopediaService = new EncyclopediaService();
-        static final MonsterballService monsterballService = new MonsterballService();
+    static final MonsterballService monsterballService = new MonsterballService();
     static final MemberService memberService = new MemberService();
     static final MonsterballApplication monsterballApplication = new MonsterballApplication();
 
@@ -24,40 +24,12 @@ public class Application {
         Scanner sc = new Scanner(System.in);
         String loginId = null;
         Member resultMember = null;
-        boolean isFirstMenu = true;
-        while (isFirstMenu) {
-            System.out.println("====== 회원 관리 프로그램 ======");
-            System.out.println("1. 회원 가입");
-            System.out.println("2. 로그인");
-            System.out.print("메뉴를 선택해 주세요: ");
-            int input = sc.nextInt();
 
-            switch (input) {
-                case 1: // 회원가입
-                    String registId = memberService.registMember(signUp());
-                    Pokemon newPokemon = pokemonService.meetRandomPokemon();
-                    encyclopediaService.addEncyclopedia(registId, newPokemon);
-                    break;
-                case 2: // 로그인
-                    resultMember = memberService.logInMember(checkMemIdAndPwd());
-                    if (resultMember != null) {
-                        System.out.println("로그인 되었습니다!");
-                        isFirstMenu = false;
-                        loginId = resultMember.getId();
-                    }
-                    break;
-                default:
-                    System.out.println("번호를 잘못 입력하셨습니다.");
-            }
-        }
+        registOrLogin(sc,resultMember,loginId);
 
             boolean isSecondMenu = true;
             int encyclopediaMenu = 0;
-            int myPokemonMenu = 0;
-            int wildMenu = 0;
-            int memberInformationMenu = 0;
-            int communityMenu = 0;
-            int friendMenu = 0;
+
             while(isSecondMenu){
                 System.out.println("===== Game Menu =====");
                 System.out.println("1. 도감");
@@ -104,53 +76,7 @@ public class Application {
                         monsterballApplication.run(loginId);
                         break;
                     case 3:
-                        while (isthirdMenu) {
-                            System.out.println("===== 야생 =====");
-                            Pokemon meetPokemon = pokemonService.meetRandomPokemon();
-                            System.out.println("앗! 야생 " + meetPokemon.getPokemonName() + " 이(가) 튀어나왔다!");
-                            System.out.println("무엇을 할까?");
-                            System.out.println("1. 싸운다.");
-                            System.out.println("2. 도망친다.");
-                            System.out.print("메뉴 입력: ");
-                            wildMenu = sc.nextInt();
-                            switch (wildMenu) {
-                                case 1:
-                                    System.out.print("포켓몬을 선택해주세요: ");
-                                    System.out.println(monsterballService.inquiryMyPokemon(loginId));
-                                    int toFightPokemon = sc.nextInt();
-                                    ArrayList<MyPokemon> myPokemons = monsterballService.showMyPokemon(loginId);
-                                    Pokemon fightingPokemon = myPokemons.get(toFightPokemon - 1).getPokemon();
-                                    System.out.println(fightingPokemon.getPokemonName() + "의 스킬 목록");
-                                    ArrayList<Skill> skills = fightingPokemon.getPoekmonSkill();
-                                    for (int i = 0; i < skills.size(); i++) {
-                                        System.out.println((i + 1) + ". " + skills.get(i).getSkillName()
-                                                + "( Power : " + skills.get(i).getSkillPower() + " )");
-                                    }
-                                    System.out.print("사용할 스킬을 선택해주세요: ");
-                                    int fightSkillNo = sc.nextInt();
-                                    if (pokemonService.isWildPokemonWin(meetPokemon, fightingPokemon, fightSkillNo)) {
-                                        System.out.println(fightingPokemon.getPokemonName() + "은(는) 쓰러졌다!");
-                                    } else {
-                                        System.out.println("야생의 " + meetPokemon.getPokemonName() + "은(는) 쓰러졌다!");
-                                        System.out.println("신난다! " + meetPokemon.getPokemonName() + "을(를) 잡았다!");
-                                        ArrayList<Integer> myPokemonNoList = encyclopediaService
-                                                .getEncyclopedia(loginId).getPokemonNoInEncyclopedia();
-                                        boolean isInEncyc = false;
-                                        for (int pokemonNo : myPokemonNoList) {
-                                            if (pokemonNo == meetPokemon.getPokemonNo()) isInEncyc = true;
-                                        }
-                                        if (!isInEncyc) {
-                                            encyclopediaService.addPokemonToEncylopedia(loginId, meetPokemon.getPokemonNo());
-                                        }
-                                        System.out.println("테스트 전투 종료");
-                                        break;
-
-                                    }
-                                case 2:
-                                    isthirdMenu = false;
-                                    break;
-                            }
-                                    }
+                        goToBush(isthirdMenu,sc,loginId);
                         break;
                     case 4:
                         goMyPage(resultMember);
@@ -159,13 +85,13 @@ public class Application {
                         System.out.println("===== 게시판 =====");
                         System.out.println("1. ???");
                         System.out.print("메뉴 입력: ");
-                        communityMenu = sc.nextInt();
+                        int communityMenu = sc.nextInt();
                         break;
                     case 6:
                         System.out.println("====== 친구목록 =====");
                         System.out.println("1. ???");
                         System.out.print("메뉴 입력: ");
-                        friendMenu = sc.nextInt();
+                        int friendMenu = sc.nextInt();
                         break;
                     case 7:
                         return;
@@ -173,6 +99,37 @@ public class Application {
             }
 
 
+    }
+
+    private static void registOrLogin(Scanner sc,Member resultMember, String loginId) {
+        boolean isFirstMenu = true;
+        while (isFirstMenu) {
+            System.out.println("====== 회원 관리 프로그램 ======");
+            System.out.println("1. 회원 가입");
+            System.out.println("2. 로그인");
+            System.out.print("메뉴를 선택해 주세요: ");
+            int input = sc.nextInt();
+
+            switch (input) {
+                case 1: // 회원가입
+                    String registId = memberService.registMember(signUp());
+                    ArrayList<MyPokemon> newMyPokemon = monsterballService.createNewMembersList(registId);
+                    System.out.println(newMyPokemon); // 여기서 만든게 도감에는 저장되는데 내포켓몬에 이상하게 저장됨
+                    encyclopediaService.addEncyclopedia(registId, newMyPokemon.get(0).getPokemon());
+
+                    break;
+                case 2: // 로그인
+                    resultMember = memberService.logInMember(checkMemIdAndPwd());
+                    if (resultMember != null) {
+                        System.out.println("로그인 되었습니다!");
+                        isFirstMenu = false;
+                        loginId = resultMember.getId();
+                    }
+                    break;
+                default:
+                    System.out.println("번호를 잘못 입력하셨습니다.");
+            }
+        }
     }
 
     private static void goMyPage(Member resultMember) {
@@ -330,6 +287,57 @@ public class Application {
         newMember = new Member(id, pwd, name, age, nickName);
 
         return newMember;
+    }
+
+    private static void goToBush(boolean isthirdMenu,Scanner sc,String loginId) {
+        int wildMenu;
+        while (isthirdMenu) {
+            System.out.println("===== 야생 =====");
+            Pokemon meetPokemon = pokemonService.meetRandomPokemon();
+            System.out.println("앗! 야생 " + meetPokemon.getPokemonName() + " 이(가) 튀어나왔다!");
+            System.out.println("무엇을 할까?");
+            System.out.println("1. 싸운다.");
+            System.out.println("2. 도망친다.");
+            System.out.print("메뉴 입력: ");
+            wildMenu = sc.nextInt();
+            switch (wildMenu) {
+                case 1:
+                    System.out.print("포켓몬을 선택해주세요: ");
+                    System.out.println(monsterballService.inquiryMyPokemon(loginId));
+                    int toFightPokemon = sc.nextInt();
+                    ArrayList<MyPokemon> myPokemons = monsterballService.showMyPokemon(loginId);
+                    Pokemon fightingPokemon = myPokemons.get(toFightPokemon - 1).getPokemon();
+                    System.out.println(fightingPokemon.getPokemonName() + "의 스킬 목록");
+                    ArrayList<Skill> skills = fightingPokemon.getPoekmonSkill();
+                    for (int i = 0; i < skills.size(); i++) {
+                        System.out.println((i + 1) + ". " + skills.get(i).getSkillName()
+                                + "( Power : " + skills.get(i).getSkillPower() + " )");
+                    }
+                    System.out.print("사용할 스킬을 선택해주세요: ");
+                    int fightSkillNo = sc.nextInt();
+                    if (pokemonService.isWildPokemonWin(meetPokemon, fightingPokemon, fightSkillNo)) {
+                        System.out.println(fightingPokemon.getPokemonName() + "은(는) 쓰러졌다!");
+                    } else {
+                        System.out.println("야생의 " + meetPokemon.getPokemonName() + "은(는) 쓰러졌다!");
+                        System.out.println("신난다! " + meetPokemon.getPokemonName() + "을(를) 잡았다!");
+                        ArrayList<Integer> myPokemonNoList = encyclopediaService
+                                .getEncyclopedia(loginId).getPokemonNoInEncyclopedia();
+                        boolean isInEncyc = false;
+                        for (int pokemonNo : myPokemonNoList) {
+                            if (pokemonNo == meetPokemon.getPokemonNo()) isInEncyc = true;
+                        }
+                        if (!isInEncyc) {
+                            encyclopediaService.addPokemonToEncylopedia(loginId, meetPokemon.getPokemonNo());
+                        }
+                        System.out.println();
+                    }
+                    break;
+                case 2:
+                    isthirdMenu = false;
+                    System.out.println("무사히 도망쳤다!");
+                    break;
+            }
+        }
     }
 }
 

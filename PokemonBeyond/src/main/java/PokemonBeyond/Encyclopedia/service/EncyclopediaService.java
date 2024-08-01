@@ -58,11 +58,13 @@ public class EncyclopediaService {
     public void addEncyclopedia(String memberId,Pokemon pokemon){
         ArrayList<Integer> pokemonNoList = new ArrayList<>();
         pokemonNoList.add(pokemon.getPokemonNo());
-        if(encyclopediaRepository.getEncyclopediaList().isEmpty()){
+        File encycFile = new File("src/main/java/PokemonBeyond/Encyclopedia/db/encyclopedia.dat");
+        if(!encycFile.exists()){
             ArrayList<Encyclopedia> newEncycList = new ArrayList<>();
             newEncycList.add(new Encyclopedia(memberId,pokemonNoList));
             encyclopediaRepository.saveEncyclopedia(newEncycList,
                     new File("src/main/java/PokemonBeyond/Encyclopedia/db/encyclopedia.dat"));
+
         } else {
             encyclopediaRepository.insertEncyclopedia(new Encyclopedia(memberId, pokemonNoList));
         }
