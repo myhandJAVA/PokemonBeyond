@@ -2,6 +2,7 @@ package PokemonBeyond.MonsterBall.run;
 
 import PokemonBeyond.MonsterBall.aggregate.MyPokemon;
 import PokemonBeyond.MonsterBall.service.MonsterballService;
+import PokemonBeyond.Pokemon.aggregate.Pokemon;
 
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -42,7 +43,10 @@ public class MonsterballApplication {
                             }
                         }
                         MyPokemon selectedPokemon = monsterballService.selectMyPokemon(memberId, choiceIdx);
-                        System.out.println(selectedPokemon);
+                        Pokemon pokemon = selectedPokemon.getPokemon();
+                        System.out.println("포켓몬 종류: " + selectedPokemon.getPokemon() +
+                                ", 이름: " + selectedPokemon.getName());
+                    System.out.println(pokemon);
                     break;
                 case 2:
                     System.out.println(monsterballService.inquiryMyPokemon(memberId));
