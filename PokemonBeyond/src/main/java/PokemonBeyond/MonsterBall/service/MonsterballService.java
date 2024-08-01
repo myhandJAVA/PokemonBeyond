@@ -32,13 +32,12 @@ public class MonsterballService {
     public ArrayList<MyPokemon> createNewMembersList(String memberId) {
         // 필요할 때만 PokemonService를 호출해서 무한 재귀 호출을 방지
         PokemonService pokemonService = new PokemonService();
-        ArrayList<MyPokemon> newmemberList;
         ArrayList<MyPokemon> newMemberList = new ArrayList<>();
         Pokemon FirstPokemon = pokemonService.meetRandomPokemon();
         MyPokemon startingPokemon = new MyPokemon(FirstPokemon, memberId);
         newMemberList.add(startingPokemon);
-        newmemberList = monsterBallRepository.addNewMyPokemonList(memberId, newMemberList);
-        return newmemberList;
+        newMemberList = monsterBallRepository.addNewMyPokemonList(memberId, newMemberList);
+        return newMemberList;
     }
     // 덜 찼을 때에도 null값으로 되어있을 테니 거기다가 넣고
     // 꽉 찼을 때 새로운 포켓몬을 만났을 경우 특정 인덱스 포켓몬을 버리고 그 인덱스에 넣는 거에도 사용
@@ -133,5 +132,20 @@ public class MonsterballService {
     /* 현재 포켓몬 리스트 크기를 가져오는 메서드 */
     public int getPokemonCount(String memberId) {
         return monsterBallRepository.selectMyPokemon(memberId).size();
+    }
+
+    public void autoFileSave(String memberId) {
+            ArrayList<MyPokemon> selectedList = monsterBallRepository.selectMyPokemon(memberId);
+            int result = monsterBallRepository.updatePokemonList(memberId, selectedList);
+            if(result == 1) {
+                System.out.println("포켓몬 리스트가 자동 저장되었습니다.");
+            }
+            else System.out.println("자동 저장을 실패했습니다.");
+    }
+
+    /* 상세 조회에서 번호를 입력하면 그 포켓몬의 상세 정보를 보여주는 메서드 */
+    public MyPokemon selectMyPokemon(String memberId, int choiceIdx) {
+        MyPokemon pickedPokemon = monsterBallRepository.getOnePokemon(memberId, choiceIdx);
+        return pickedPokemon;
     }
 }

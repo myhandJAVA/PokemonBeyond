@@ -93,31 +93,18 @@ public class MonsterBallRepository {
 
     /* 새로운 회원 리스트 생성 후 등록 */
     public ArrayList<MyPokemon> addNewMyPokemonList(String memberId, ArrayList<MyPokemon> newList) {
-        MyObjectOutput moo = null;
-        try {
-            moo = new MyObjectOutput(
-                    new BufferedOutputStream(
-                            new FileOutputStream(filePath, true)
-                    )
-            );
-            moo.writeObject(newList);
-            allMebmersPokemons.put(memberId, newList);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } finally {
-            if(moo != null) {
-                try {
-                    moo.close();
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        }
+        allMebmersPokemons.put(memberId, newList);
+        saveAllMembersPokemons(file, allMebmersPokemons);
         return newList;
     }
-    /* 포켓몬 조회하는 메서드 */
+    /* 포켓몬 리스트 조회하는 메서드 */
     public ArrayList<MyPokemon> selectMyPokemon(String memberId) {
         ArrayList<MyPokemon> memberPokemons = allMebmersPokemons.get(memberId);
         return memberPokemons;
+    }
+
+    /* 포켓몬 한 마리 조회하는 메서드 */
+    public MyPokemon getOnePokemon(String memberId, int choiceIdx) {
+        return allMebmersPokemons.get(memberId).get(choiceIdx);
     }
 }
