@@ -10,7 +10,7 @@ import java.util.Scanner;
 public class MonsterballApplication {
     private static final MonsterballService monsterballService = new MonsterballService();
     private static String memberId;
-
+// pullrequest 용
     public void run(String Id) {
         Scanner sc = new Scanner(System.in);
         memberId = Id;
