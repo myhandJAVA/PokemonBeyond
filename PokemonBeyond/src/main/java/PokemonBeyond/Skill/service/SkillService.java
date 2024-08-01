@@ -59,7 +59,7 @@ public class SkillService {
         ArrayList<Skill> saveSkillList = sr.selectSkills();
         ArrayList<MyPokemon> catchPokemonList = ms.showMyPokemon(memberId);
         Skill randomSkill;
-        if(catchPokemonList != null) {
+        if(catchPokemonList != null && catchPokemonList.size() < 5) {
             for(MyPokemon myPokemon: catchPokemonList) {
                 do {
                     int randomIndex = random.nextInt(saveSkillList.size());
@@ -73,7 +73,7 @@ public class SkillService {
                     System.out.println(myPokemon.getPokemon().getPokemonName() + "의 새로운 \"" + randomSkill.getSkillName() + "\" 스킬이 추가 되었습니다.");
                 }
             }
-        }
+        } else System.out.println("보유할 수 있는 스킬 갯수를 초과하였습니다. 보유중인 스킬과 교체하겠습니까?");
     }
 
     public void deleteSkill(String memberId, int pokemonNo, String deleteSkillName) {
@@ -82,6 +82,7 @@ public class SkillService {
         String pokemonName = "";
         if (catchPokemonList != null) {
             for(MyPokemon myPokemon: catchPokemonList) {
+
                 if(myPokemon.getPokemon().getPokemonNo() == pokemonNo) {
                     pokemonName = myPokemon.getName();
                     List<Skill> skills = myPokemon.getPokemon().getPoekmonSkill();
