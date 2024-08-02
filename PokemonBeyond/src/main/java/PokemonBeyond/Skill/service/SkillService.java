@@ -59,6 +59,7 @@ public class SkillService {
         ArrayList<Skill> saveSkillList = sr.selectSkills();
         ArrayList<MyPokemon> catchPokemonList = ms.showMyPokemon(memberId);
         Skill randomSkill;
+
         if(catchPokemonList != null && catchPokemonList.size() < 5) {
             for(MyPokemon myPokemon: catchPokemonList) {
                 do {
