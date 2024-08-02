@@ -73,7 +73,7 @@ public class SkillService {
                     System.out.println(myPokemon.getPokemon().getPokemonName() + "의 새로운 \"" + randomSkill.getSkillName() + "\" 스킬이 추가 되었습니다.");
                 }
             }
-        } else System.out.println("보유할 수 있는 스킬 갯수를 초과하였습니다. 보유중인 스킬과 교체하겠습니까?");
+        } else System.out.println("보유할 수 있는 스킬 갯수를 초과하였습니다. 보유 중인 스킬과 교체하겠습니까?");
     }
 
     public void deleteSkill(String memberId, int pokemonNo, String deleteSkillName) {
