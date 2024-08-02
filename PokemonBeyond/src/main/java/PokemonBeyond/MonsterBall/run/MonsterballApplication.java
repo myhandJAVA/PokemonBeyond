@@ -34,32 +34,37 @@ public class MonsterballApplication {
                     while (viewingList) {
                         System.out.println(monsterballService.inquiryMyPokemon(memberId));
                         maxPokemonIndex = monsterballService.getPokemonCount(memberId);
-                        System.out.println("상세 정보를 보고 싶은 포켓몬의 번호를 입력해주세요(Enter를 누르면 이전 메뉴로 돌아갑니다): ");
-                        sc.nextLine();
-                        String input = sc.nextLine().trim();
+                        System.out.println("상세 정보를 보고 싶은 포켓몬의 번호를 입력해주세요(0번 -> 이전 메뉴로 돌아갑니다): ");
 
-                        if (input.isEmpty()) break;
-
-                        try {
-                            int choiceIdx = Integer.parseInt(input) - 1;
-                            if (choiceIdx >= 0 && choiceIdx < maxPokemonIndex) {
-                                MyPokemon selectedPokemon =
-                                        monsterballService.selectMyPokemon(memberId, choiceIdx);
-                                Pokemon pickedPokemon = selectedPokemon.getPokemon();
-                                ArrayList<Skill> skillList = pickedPokemon.getPoekmonSkill();
-                                System.out.println("포켓몬 종류: " + pickedPokemon.getPokemonName() +
-                                        ", 이름: " + selectedPokemon.getName());
-                                for (int i = 0; i < skillList.size(); i++) {
-                                    System.out.println((i + 1) + ". " + skillList.get(i).getSkillName() +
-                                            " - 스킬위력: " + skillList.get(i).getSkillPower());
-                                }
-                                System.out.println("계속하려면 Enter키를 누르세요...");
-                                sc.nextLine();
-                            } else {
-                                System.out.println("잘못된 입력입니다. 다시 번호를 입력해주세요.");
+                        int choiceIdx = -1;
+                        boolean invalidInput = false;
+                        while (!invalidInput) {
+                            try {
+                                choiceIdx = Integer.parseInt(sc.next()) - 1;
+                                invalidInput = true;
+                            } catch (NumberFormatException e) {
+                                System.out.println(monsterballService.inquiryMyPokemon(memberId));
+                                System.out.print("숫자를 입력해주세요: ");
                             }
-                        } catch (NumberFormatException e) {
-                            System.out.println("숫자를 입력해주세요");
+                        }
+
+                        if (choiceIdx == -1) viewingList = false;
+
+                        else if (choiceIdx >= 0 && choiceIdx < maxPokemonIndex) {
+                            MyPokemon selectedPokemon = monsterballService.selectMyPokemon(memberId, choiceIdx);
+                            Pokemon pickedPokemon = selectedPokemon.getPokemon();
+                            ArrayList<Skill> skillList = pickedPokemon.getPoekmonSkill();
+                            System.out.println("포켓몬 종류: " + pickedPokemon.getPokemonName() +
+                                    ", 이름: " + selectedPokemon.getName());
+                            for (int i = 0; i < skillList.size(); i++) {
+                                System.out.println((i + 1) + ". " + skillList.get(i).getSkillName() +
+                                        " - 스킬위력: " + skillList.get(i).getSkillPower());
+                            }
+                            System.out.println("계속하려면 Enter키를 누르세요...");
+                            sc.nextLine();
+                            sc.nextLine();
+                        } else {
+                            System.out.println("잘못된 입력입니다. 다시 번호를 입력해주세요");
                         }
                     }
                     break;
@@ -68,7 +73,7 @@ public class MonsterballApplication {
                     while (changingNames) {
                         System.out.println(monsterballService.inquiryMyPokemon(memberId));
                         maxPokemonIndex = monsterballService.getPokemonCount(memberId);
-                        System.out.println("변경하실 포켓몬의 번호를 입력해주세요(0: 이전 메뉴로 돌아가기): ");
+                        System.out.println("변경하실 포켓몬의 번호를 입력해주세요(0번 -> 이전 메뉴로 돌아갑니다): ");
                         int changeIdx = -1;
                         while (changeIdx < 0 || changeIdx >= maxPokemonIndex) {
                             try {
@@ -107,7 +112,7 @@ public class MonsterballApplication {
                     while (viewingList3) {
                         System.out.println(monsterballService.inquiryMyPokemon(memberId));
                         maxPokemonIndex = monsterballService.getPokemonCount(memberId);
-                        System.out.println("오박사님께 보내고 싶은 포켓몬의 번호를 입력해주세요(0번을 누르면 이전 메뉴로 돌아갑니다): ");
+                        System.out.println("오박사님께 보내고 싶은 포켓몬의 번호를 입력해주세요(0번 -> 이전 메뉴로 돌아갑니다): ");
 
                         int deleteIdx = -1;
                         boolean invalidInput = false;
