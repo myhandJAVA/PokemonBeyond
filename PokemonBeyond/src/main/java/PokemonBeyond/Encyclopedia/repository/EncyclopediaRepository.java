@@ -58,9 +58,13 @@ public class EncyclopediaRepository {
     public ArrayList<Encyclopedia> selectAllEncyclopedia(){
         return encyclopediaList;
     }
+    
     public Encyclopedia selectEncyclopedia(String memberId){
+
         for (Encyclopedia encyclopedia : encyclopediaList){
+            System.out.println("encyclopedia = " + encyclopedia);
             if(encyclopedia.getMemberId().equals(memberId)){
+                System.out.println("encyclopedia.getMemberId() = " + encyclopedia.getMemberId());
                 return encyclopedia;
             }
         }
@@ -138,9 +142,10 @@ public class EncyclopediaRepository {
         ArrayList<Encyclopedia> copiedList = (ArrayList<Encyclopedia>) encyclopediaList.clone();
         for(int i=0; i<copiedList.size();i++){
             if(copiedList.get(i).getMemberId().equals(memberId)){
+                deletedMemNo = i;
                 copiedList.remove(i);
                 isInList = true;
-                deletedMemNo = i;
+
             }
         }
         if(!isInList){
@@ -149,7 +154,6 @@ public class EncyclopediaRepository {
             return result;
         }
         saveEncyclopedia(copiedList,new File("src/main/java/PokemonBeyond/Encyclopedia/db/encyclopedia.dat"));
-        encyclopediaList.remove(deletedMemNo);
         result = 1;
         return result;
     }
