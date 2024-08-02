@@ -11,8 +11,17 @@ import PokemonBeyond.Pokemon.service.PokemonService;
 import PokemonBeyond.Skill.aggregate.Skill;
 import PokemonBeyond.Skill.service.SkillService;
 
+import javax.swing.plaf.nimbus.State;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Scanner;
+
+import static PokemonBeyond.run.JDBCTemplate.getConnection;
+import static PokemonBeyond.run.JDBCTemplate.close;
+
 
 public class Application {
     static final PokemonService pokemonService = new PokemonService();
@@ -26,33 +35,41 @@ public class Application {
         Scanner sc = new Scanner(System.in);
         String loginId = null;
         Member resultMember = null;
+        ArrayList<String> graphicList = getGraphic();
 
-        loginId = registOrLogin(sc,resultMember,loginId);
-        runMainMenu(sc, loginId, resultMember);
-        // runMainMenu를 컨트롤클릭하고 case 3에 있는 goToGBush를 수정해야합니다!!
-        // 일단은 포켓몬을 만나서 이긴다/진다 + 도감에 등록한다만 제대로 구현되어있고,
-        // 스킬을 추가하거나 삭제하기, 가진 포켓몬을 추가하거나 삭제하기는 추가해야 합니다.
-        // 입력 예외처리(숫자를 넣어야하는데 문자입력)등도 거의 안되어있습니다.
-        // 그래픽도 추가해야 합니다!!
+        loginId = registOrLogin(sc,resultMember,loginId); // 여기서 반환값으로 안받으면 회원정보 못받아와서 4번메뉴 오류남!!
+        runMainMenu(sc, loginId, resultMember,graphicList);
+        // 몬스터볼 - 오박시님께 보내기 메소드 오류남 - 노션에 사진 올려놓았음!!
+        // 입력 예외처리(숫자를 넣어야하는데 문자입력) - 꼭 해야할까요?
+
 
     }
 
+    private static ArrayList<String> getGraphic() {
+        Connection con = getConnection();
+        Statement stmt = null;
+        ResultSet rset = null;
+        ArrayList<String> graphicList = null;
+        try {
+            stmt = con.createStatement();
+            rset = stmt.executeQuery("SELECT * FROM tb_pokemon_graphic;");
+            graphicList = new ArrayList<String>();
+            while(rset.next()){
+                graphicList.add(rset.getString("graphic"));
+            }
 
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            // 해체는 조립의 역순
+            close(rset);
+            close(stmt);
+            close(con);
+        }
+        return graphicList;
+    }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-    private static void  runMainMenu(Scanner sc, String loginId, Member resultMember) {
+    private static void  runMainMenu(Scanner sc, String loginId, Member resultMember,ArrayList<String> graphicList) {
         boolean isSecondMenu = true;
         while(isSecondMenu){
             System.out.println("===== Game Menu =====");
@@ -76,7 +93,7 @@ public class Application {
                     monsterballApplication.run(loginId,monsterballService);
                     break;
                 case 3:
-                    goToBush(isthirdMenu, sc, loginId);
+                    goToBush(isthirdMenu, sc, loginId,graphicList);
                     break;
                 case 4:
                     goMyPage(resultMember);
@@ -93,6 +110,15 @@ public class Application {
             }
         }
     }
+
+
+
+
+
+
+
+
+
 
 
     private static void runEncyclopediaMenu(boolean isthirdMenu, Scanner sc) {
@@ -311,11 +337,12 @@ public class Application {
         return newMember;
     }
 
-    private static void goToBush(boolean isthirdMenu,Scanner sc,String loginId) {
+    private static void goToBush(boolean isthirdMenu,Scanner sc,String loginId,ArrayList<String> graphicList) {
         int wildMenu;
         while (isthirdMenu) {
             System.out.println("===== 야생 =====");
             Pokemon meetPokemon = pokemonService.meetRandomPokemon();
+            printDotPokemon(meetPokemon.getPokemonNo()-1,graphicList);
             System.out.println("앗! 야생 " + meetPokemon.getPokemonName() + " 이(가) 튀어나왔다!");
             System.out.println("무엇을 할까?");
             System.out.println("1. 싸운다.");
@@ -343,39 +370,15 @@ public class Application {
                         System.out.println("야생의 " + meetPokemon.getPokemonName() + "은(는) 쓰러졌다!");
                         System.out.println("신난다! " + meetPokemon.getPokemonName() + "을(를) 잡았다!");
 
-                        System.out.println("loginId = " + loginId);
+                        // 내 도감에 추가
+                        addToMyEncyclopedia(loginId, meetPokemon);
 
-                        ArrayList<Integer> myPokemonNoList = encyclopediaService
-                                .getEncyclopedia(loginId).getPokemonNoInEncyclopedia();
+                        // 내 포켓몬에 추가
+                        addToMyPokemon(sc, loginId, meetPokemon);
 
+                        // 스킬 추가
+                        addToMySkill(sc, loginId, fightingPokemon);
 
-                        boolean isInEncyc = false;
-                        for (int pokemonNo : myPokemonNoList) {
-                            if (pokemonNo == meetPokemon.getPokemonNo()) isInEncyc = true;
-                        }
-                        if (!isInEncyc) {
-                            encyclopediaService.addPokemonToEncylopedia(loginId, meetPokemon.getPokemonNo());
-                        }
-
-                        //포켓몬을 잡거나 놓고나
-
-                        System.out.println("전투에서 이겨 새로운 스킬을 얻었습니다.");
-                        int result = skillService.saveSkill(loginId,fightingPokemon.getPokemonNo());
-                        if (result == 0) {
-                            System.out.println("1. 예");
-                            System.out.println("2. 아니오.");
-                            int answer = sc.nextInt();
-                            if (answer==1){
-                                System.out.println("===== 현재 포켓몬의 스킬 목록 =====");
-                                for (int i = 0; i < fightingPokemon.getPoekmonSkill().size(); i++) {
-                                    System.out.println(i+". "+fightingPokemon.getPoekmonSkill().get(i).getSkillName());
-                                }
-                                System.out.print("변경할 스킬 번호를 입력해주세요: ");
-                                int changeSkill = sc.nextInt();
-                                String changeSkillName = fightingPokemon.getPoekmonSkill().get(changeSkill).getSkillName();
-                                skillService.updateSkill(loginId,fightingPokemon.getPokemonNo(),changeSkillName);
-                            }
-                        }
                         System.out.println();
                     }
                     break;
@@ -384,6 +387,56 @@ public class Application {
                     System.out.println("무사히 도망쳤다!");
                     break;
             }
+        }
+    }
+
+    private static void printDotPokemon(int pokemonNo,ArrayList<String> graphicList) {
+        System.out.println(graphicList.get(pokemonNo));
+    }
+
+    private static void addToMySkill(Scanner sc, String loginId, Pokemon fightingPokemon) {
+        System.out.println("전투에서 이겨 새로운 스킬을 얻었습니다.");
+        int result = skillService.saveSkill(loginId, fightingPokemon.getPokemonNo(),monsterballService);
+        if (result == 0) {
+            System.out.println("1. 예");
+            System.out.println("2. 아니오");
+            int answer = sc.nextInt();
+            if (answer==1){
+                System.out.println("===== 현재 포켓몬의 스킬 목록 =====");
+                for (int i = 0; i < fightingPokemon.getPoekmonSkill().size(); i++) {
+                    System.out.println(i+1+". "+ fightingPokemon.getPoekmonSkill().get(i).getSkillName());
+                }
+                System.out.print("변경할 스킬 번호를 입력해주세요: ");
+                int changeSkill = sc.nextInt();
+                String changeSkillName = fightingPokemon.getPoekmonSkill().get(changeSkill-1).getSkillName();
+                skillService.updateSkill(loginId, fightingPokemon.getPokemonNo(),changeSkillName,monsterballService);
+            }
+        }
+    }
+
+    private static void addToMyPokemon(Scanner sc, String loginId, Pokemon meetPokemon) {
+        int catchPokemon = monsterballService.addnewPokemon(new MyPokemon(meetPokemon, loginId), loginId);
+        if (catchPokemon == 0 ) {
+            System.out.println("데리고 다닐 수 있는 포켓몬은 최대 6마리입니다.");
+            System.out.println("오박사님께 맡길 포켓몬을 선택해주세요: ");
+            System.out.print(monsterballService.inquiryMyPokemon(loginId));
+            System.out.println("7. " + meetPokemon.getPokemonName());
+            System.out.print("번호 입력: ");
+            int givePokemonNo = sc.nextInt()-1;
+            if(givePokemonNo<6) monsterballService.modifyPokemon(loginId,givePokemonNo);
+            else System.out.println("오박사님께 " + meetPokemon.getPokemonName() + "을(를) 성공적으로 보냈습니다!");
+        }
+    }
+
+    private static void addToMyEncyclopedia(String loginId, Pokemon meetPokemon) {
+        ArrayList<Integer> myPokemonNoList = encyclopediaService
+                .getEncyclopedia(loginId).getPokemonNoInEncyclopedia();
+        boolean isInEncyc = false;
+        for (int pokemonNo : myPokemonNoList) {
+            if (pokemonNo == meetPokemon.getPokemonNo()) isInEncyc = true;
+        }
+        if (!isInEncyc) {
+            encyclopediaService.addPokemonToEncylopedia(loginId, meetPokemon.getPokemonNo());
         }
     }
 }
