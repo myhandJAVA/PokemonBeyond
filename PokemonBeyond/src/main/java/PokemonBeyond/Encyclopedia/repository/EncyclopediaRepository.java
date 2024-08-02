@@ -15,9 +15,7 @@ public class EncyclopediaRepository {
     public EncyclopediaRepository(){
         File encyclopediaFile = new File(
                 "src/main/java/PokemonBeyond/Encyclopedia/db/encyclopedia.dat");
-        if(!encyclopediaFile.exists()){
-            saveEncyclopedia(makePokemonMasterEncyc(),encyclopediaFile);
-        }
+
         loadEncyclopediaList();
     }
 
@@ -41,20 +39,21 @@ public class EncyclopediaRepository {
                 throw new RuntimeException(e);
             }
         }
+        encyclopediaList = encycList;
 
     }
 
-    private ArrayList<Encyclopedia> makePokemonMasterEncyc() {
-        ArrayList<Pokemon> pokemonList = pokemonRepository.getPokemonList();
-        ArrayList<Integer> pokemonNoList = new ArrayList<>();
-        for(int i=0; i<pokemonList.size(); i++ ){
-            pokemonNoList.add(pokemonList.get(i).getPokemonNo());
-        }
-        ArrayList<Encyclopedia> masterList = new ArrayList<>();
-        Encyclopedia pokemonMasterEncyc = new Encyclopedia("PokemonMaster", pokemonNoList);
-        masterList.add(pokemonMasterEncyc);
-        return masterList;
-    }
+//    private ArrayList<Encyclopedia> makePokemonMasterEncyc() {
+//        ArrayList<Pokemon> pokemonList = pokemonRepository.getPokemonList();
+//        ArrayList<Integer> pokemonNoList = new ArrayList<>();
+//        for(int i=0; i<pokemonList.size(); i++ ){
+//            pokemonNoList.add(pokemonList.get(i).getPokemonNo());
+//        }
+//        ArrayList<Encyclopedia> masterList = new ArrayList<>();
+//        Encyclopedia pokemonMasterEncyc = new Encyclopedia("PokemonMaster", pokemonNoList);
+//        masterList.add(pokemonMasterEncyc);
+//        return masterList;
+//    }
 
     public ArrayList<Encyclopedia> selectAllEncyclopedia(){
         return encyclopediaList;
