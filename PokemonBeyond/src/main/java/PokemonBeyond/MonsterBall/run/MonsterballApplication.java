@@ -11,10 +11,10 @@ import java.util.Scanner;
 
 
 public class MonsterballApplication {
-    private static final MonsterballService monsterballService = new MonsterballService();
     private static String memberId;
 
-    public void run(String Id) {
+    public void run(String Id,MonsterballService monsterballService) {
+
         Scanner sc = new Scanner(System.in);
         memberId = Id;
         ArrayList<MyPokemon> memberPokemon = monsterballService.showMyPokemon(memberId);

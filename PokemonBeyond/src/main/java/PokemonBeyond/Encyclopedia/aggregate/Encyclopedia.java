@@ -2,6 +2,7 @@ package PokemonBeyond.Encyclopedia.aggregate;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class Encyclopedia implements Serializable {
     private String memberId;
@@ -29,6 +30,18 @@ public class Encyclopedia implements Serializable {
 
     public void setPokemonNoInEncyclopedia(ArrayList<Integer> pokemonNoInEncyclopedia) {
         this.pokemonNoInEncyclopedia = pokemonNoInEncyclopedia;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Encyclopedia that)) return false;
+        return Objects.equals(memberId, that.memberId) && Objects.equals(pokemonNoInEncyclopedia, that.pokemonNoInEncyclopedia);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(memberId, pokemonNoInEncyclopedia);
     }
 
     @Override

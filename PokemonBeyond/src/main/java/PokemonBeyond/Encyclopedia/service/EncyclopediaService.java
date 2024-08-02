@@ -48,6 +48,7 @@ public class EncyclopediaService {
         copiedEncyclopedia.setPokemonNoInEncyclopedia(
                 (ArrayList<Integer>) encyclopedia.getPokemonNoInEncyclopedia().clone());
         copiedEncyclopedia.getPokemonNoInEncyclopedia().add(pokemonNo);
+        System.out.println(copiedEncyclopedia);
         int result = 1;
         result = encyclopediaRepository.deleteEncyclopedia(memberId);
         result = encyclopediaRepository.insertEncyclopedia(copiedEncyclopedia);
