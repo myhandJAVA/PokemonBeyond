@@ -59,17 +59,19 @@ public class SkillService {
         ArrayList<Skill> saveSkillList = sr.selectSkills();
         ArrayList<MyPokemon> catchPokemonList = ms.showMyPokemon(memberId);
         Skill randomSkill;
-        for(MyPokemon myPokemon: catchPokemonList) {
-            do {
-                int randomIndex = random.nextInt(saveSkillList.size());
-                randomSkill = saveSkillList.get(randomIndex);
-            } while (myPokemon.getPokemon().getPoekmonSkill().contains(randomSkill));
+        if(catchPokemonList != null) {
+            for(MyPokemon myPokemon: catchPokemonList) {
+                do {
+                    int randomIndex = random.nextInt(saveSkillList.size());
+                    randomSkill = saveSkillList.get(randomIndex);
+                } while (myPokemon.getPokemon().getPoekmonSkill().contains(randomSkill));
 
-            if(myPokemon.getPokemon().getPokemonNo() == pokemonNo) {
-                int randomIndex = random.nextInt(saveSkillList.size());
-                randomSkill = saveSkillList.get(randomIndex);
-                myPokemon.getPokemon().getPoekmonSkill().add(randomSkill);
-                System.out.println(myPokemon.getPokemon().getPokemonName() + "의 새로운 \"" + randomSkill.getSkillName() + "\" 스킬이 추가 되었습니다.");
+                if(myPokemon.getPokemon().getPokemonNo() == pokemonNo) {
+                    int randomIndex = random.nextInt(saveSkillList.size());
+                    randomSkill = saveSkillList.get(randomIndex);
+                    myPokemon.getPokemon().getPoekmonSkill().add(randomSkill);
+                    System.out.println(myPokemon.getPokemon().getPokemonName() + "의 새로운 \"" + randomSkill.getSkillName() + "\" 스킬이 추가 되었습니다.");
+                }
             }
         }
     }
@@ -90,7 +92,39 @@ public class SkillService {
         System.out.println(pokemonName + "의 " + deleteSkillName + " 스킬이 삭제되었습니다.");
     }
 
-    public void updateSkill(int id) {
-        
+    public void updateSkill(String memberId, int pokemonNo, String originSKillName, ArrayList<MyPokemon> catchPokemonList) {
+        ArrayList<Skill> saveSkillList = sr.selectSkills();
+//        ArrayList<MyPokemon> catchPokemonList = ms.showMyPokemon(memberId);
+        Skill randomSkill;
+
+        if(catchPokemonList != null) {
+            for(MyPokemon myPokemon: catchPokemonList) {
+                if(myPokemon.getPokemon().getPokemonNo() == pokemonNo) {
+                    List<Skill> skills = myPokemon.getPokemon().getPoekmonSkill();
+
+                    do {
+                        int randomIndex = random.nextInt(saveSkillList.size());
+                        randomSkill = saveSkillList.get(randomIndex);
+                    } while (myPokemon.getPokemon().getPoekmonSkill().contains(randomSkill));
+
+                    int randomIndex = random.nextInt(saveSkillList.size());
+                    randomSkill = saveSkillList.get(randomIndex);
+
+                    System.out.println("랜덤스킬: " + randomSkill);
+
+                    for (int i = 0; i < skills.size(); i++) {
+                        Skill skill = skills.get(i);
+                        if(skill.getSkillName().equals(originSKillName)) {
+                            skills.set(i, randomSkill);
+                            break;
+                        }
+                    }
+
+                    System.out.println("수정되었는지 확인: " + myPokemon.getPokemon().getPoekmonSkill());
+                }
+            }
+        }
+
+
     }
 }

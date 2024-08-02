@@ -54,6 +54,10 @@ public class Application {
 
 //        ss.saveSkill("user01", 1, arr);
 
+        ss.updateSkill("user01", 1, "몸통박치기", arr);
+
+        System.out.println();
+
         System.out.println("내포켓몬: " + myPokemon);
 
 
