@@ -73,7 +73,7 @@ public class Application {
 
                         break;
                     case 2:   ///// monsterballApplication
-                        monsterballApplication.run(loginId);
+                        monsterballApplication.run(loginId, monsterballService);
                         break;
                     case 3:
                         goToBush(isthirdMenu,sc,loginId);
