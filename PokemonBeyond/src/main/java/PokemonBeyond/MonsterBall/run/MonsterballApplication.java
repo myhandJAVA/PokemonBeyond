@@ -3,7 +3,7 @@ package PokemonBeyond.MonsterBall.run;
 import PokemonBeyond.MonsterBall.aggregate.MyPokemon;
 import PokemonBeyond.MonsterBall.service.MonsterballService;
 import PokemonBeyond.Pokemon.aggregate.Pokemon;
-import PokemonBeyond.Pokemon.exception.EmptyNameexception;
+import PokemonBeyond.MonsterBall.exception.EmptyNameexception;
 import PokemonBeyond.Skill.aggregate.Skill;
 
 import java.util.ArrayList;
@@ -13,8 +13,7 @@ import java.util.Scanner;
 public class MonsterballApplication {
     private static String memberId;
 
-    public void run(String Id,MonsterballService monsterballService) {
-
+    public void run(String Id, MonsterballService monsterballService) {
         Scanner sc = new Scanner(System.in);
         memberId = Id;
         ArrayList<MyPokemon> memberPokemon = monsterballService.showMyPokemon(memberId);
