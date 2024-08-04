@@ -4,12 +4,10 @@ import PokemonBeyond.MonsterBall.aggregate.MyPokemon;
 import PokemonBeyond.MonsterBall.repository.MonsterBallRepository;
 import PokemonBeyond.Pokemon.aggregate.Pokemon;
 import PokemonBeyond.Pokemon.service.PokemonService;
-import java.util.Scanner;
 
 import java.util.ArrayList;
 
 public class MonsterballService {
-    Scanner sc = new Scanner(System.in);
 
     private final MonsterBallRepository monsterBallRepository = new MonsterBallRepository();
 
@@ -48,15 +46,15 @@ public class MonsterballService {
         ArrayList<MyPokemon> currentList = monsterBallRepository.selectMyPokemon(memberId);
         int result = 0;
 
-        for (int i = 0; i < 6; i++) {
-            if(currentList.get(i) == null) {
-                currentList.add(i, newPokemon);
-                result = monsterBallRepository.updatePokemonList(memberId, currentList);
-            }
+        if (currentList.size() < 6) {
+            currentList.add(newPokemon);
+            result = monsterBallRepository.updatePokemonList(memberId, currentList);
+        } else {
+            System.out.println("포켓몬 리스트가 가득 찼습니다. 새 포켓몬을 추가할 수 없습니다.");
         }
 
         if (result == 1) {
-            System.out.println("신난다! " + newPokemon.getName() + "이(가) 동료가 되었다!");
+            System.out.println(newPokemon.getName() + "이(가) 동료가 되었다!");
         }
         return result;
     }
@@ -149,44 +147,5 @@ public class MonsterballService {
     public MyPokemon selectMyPokemon(String memberId, int choiceIdx) {
         MyPokemon pickedPokemon = monsterBallRepository.getOnePokemon(memberId, choiceIdx);
         return pickedPokemon;
-    }
-
-    public void fightCatch(String memberId, Pokemon caughtPokemon) {
-        ArrayList<MyPokemon> currentList = showMyPokemon(memberId);
-        MyPokemon newMyPokemon = new MyPokemon();
-        newMyPokemon.setPokemon(caughtPokemon);
-        newMyPokemon.setMemId(memberId);
-        int curSize = currentList.size();
-
-        if (curSize < 6) {
-            addnewPokemon(newMyPokemon, memberId);
-            return;
-        }
-
-        System.out.println("현재 포켓몬을 최대로 보유 중입니다!");
-        while (true) {
-            System.out.println(inquiryMyPokemon(memberId));
-            System.out.println("오박사님께 보내고 싶은 포켓몬의 번호를 입력해주세요(0번 -> 놓아주기): ");
-
-            int deleteIdx;
-            try {
-                deleteIdx = Integer.parseInt(sc.nextLine()) - 1;
-
-                if (deleteIdx == -1) {
-                    System.out.println("새로 잡은 포켓몬을 놓아주었습니다.");
-                    return;
-                }
-
-                if (deleteIdx >= 0 && deleteIdx < curSize) {
-                    modifyPokemon(memberId, deleteIdx);
-                    addnewPokemon(newMyPokemon, memberId);
-                    return;
-                } else {
-                    System.out.println("잘못된 입력입니다. 다시 번호를 입력해주세요");
-                }
-            } catch (NumberFormatException e) {
-                System.out.println("숫자를 입력해주세요");
-            }
-        }
     }
 }
