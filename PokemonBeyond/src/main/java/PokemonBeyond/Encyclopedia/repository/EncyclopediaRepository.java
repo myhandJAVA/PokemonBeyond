@@ -10,7 +10,6 @@ import java.util.ArrayList;
 
 public class EncyclopediaRepository {
     private ArrayList<Encyclopedia> encyclopediaList = new ArrayList<Encyclopedia>();
-    private PokemonRepository pokemonRepository = new PokemonRepository();
 
     public EncyclopediaRepository(){
         File encyclopediaFile = new File(
@@ -62,9 +61,7 @@ public class EncyclopediaRepository {
     public Encyclopedia selectEncyclopedia(String memberId){
 
         for (Encyclopedia encyclopedia : encyclopediaList){
-            System.out.println("encyclopedia = " + encyclopedia);
             if(encyclopedia.getMemberId().equals(memberId)){
-                System.out.println("encyclopedia.getMemberId() = " + encyclopedia.getMemberId());
                 return encyclopedia;
             }
         }
@@ -89,7 +86,6 @@ public class EncyclopediaRepository {
                 encyclopediaList.add(encyclopedia);
             }
         } catch (IOException e) {
-            System.out.println("도감정보 로딩 완료");
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         } finally {

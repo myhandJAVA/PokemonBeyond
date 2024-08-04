@@ -19,7 +19,6 @@ public class MonsterBallRepository {
 
         if(!file.exists()) {
             saveAllMembersPokemons(file, new HashMap<String, ArrayList<MyPokemon>>());
-            System.out.println("새로운 파일을 생성했습니다.");
         }
         loadAllMembersPokemons(file);
     }
@@ -58,7 +57,6 @@ public class MonsterBallRepository {
                     )
             );
             oos.writeObject(allMebersPokemons);
-            System.out.println("모든 멤버의 포켓몬 정보를 저장했습니다.");
             result = 1;
         } catch (IOException e) {
             System.out.println("파일 저장 중 오류가 발생했습니다.");
