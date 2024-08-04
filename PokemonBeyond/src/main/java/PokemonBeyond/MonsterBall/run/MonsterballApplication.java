@@ -117,7 +117,7 @@ public class MonsterballApplication {
                         boolean invalidInput = false;
                         while (!invalidInput) {
                             try {
-                                deleteIdx = Integer.parseInt(sc.next()) - 1;
+                                deleteIdx = sc.nextInt() - 1;
                                 invalidInput = true;
                             } catch (NumberFormatException e) {
                                 System.out.println(monsterballService.inquiryMyPokemon(memberId));

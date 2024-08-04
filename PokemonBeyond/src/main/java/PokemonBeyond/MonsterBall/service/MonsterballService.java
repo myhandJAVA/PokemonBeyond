@@ -46,14 +46,12 @@ public class MonsterballService {
     /* 새로운 포켓몬을 저장하는 메서드 */
     public int addnewPokemon(MyPokemon newPokemon, String memberId) {
         ArrayList<MyPokemon> currentList = monsterBallRepository.selectMyPokemon(memberId);
+        int listSize = currentList.size();
         int result = 0;
 
-        for (int i = 0; i < 6; i++) {
-            if(currentList.get(i) == null) {
-                currentList.add(i, newPokemon);
-                result = monsterBallRepository.updatePokemonList(memberId, currentList);
-            }
-        }
+        currentList.add(newPokemon);
+        result = monsterBallRepository.updatePokemonList(memberId, currentList);
+
 
         if (result == 1) {
             System.out.println("신난다! " + newPokemon.getName() + "이(가) 동료가 되었다!");
@@ -64,16 +62,17 @@ public class MonsterballService {
     public void modifyPokemon(String memberId, int deleteIdx) {
         String abandonPokemon =
                 monsterBallRepository.selectMyPokemon(memberId).get(deleteIdx).getName();
-        ArrayList<MyPokemon> oldList = monsterBallRepository.selectMyPokemon(memberId);
-        if(oldList.size() == 1) {
+        ArrayList<MyPokemon> curList = monsterBallRepository.selectMyPokemon(memberId);
+        if(curList.size() == 1) {
             System.out.println("포켓몬은 최소 1마리 이상 보유해야 합니다!");
             return;
         }
+        // 인덱스 포켓몬 삭제
+        curList.remove(deleteIdx);
         ArrayList<MyPokemon> newList = new ArrayList<>();
         // 삭제 인덱스만 빼고 리스트 복사
-        for (int i = 0; i < 6; i++) {
-            if(i == deleteIdx) continue;
-            newList.set(i, oldList.get(i));
+        for (int i = 0; i < curList.size(); i++) {
+            newList.add(curList.get(i));
         }
         int result = monsterBallRepository.updatePokemonList(memberId, newList);
         if(result == 1) {
@@ -153,9 +152,7 @@ public class MonsterballService {
 
     public void fightCatch(String memberId, Pokemon caughtPokemon) {
         ArrayList<MyPokemon> currentList = showMyPokemon(memberId);
-        MyPokemon newMyPokemon = new MyPokemon();
-        newMyPokemon.setPokemon(caughtPokemon);
-        newMyPokemon.setMemId(memberId);
+        MyPokemon newMyPokemon = new MyPokemon(caughtPokemon, memberId);
         int curSize = currentList.size();
 
         if (curSize < 6) {
@@ -170,7 +167,7 @@ public class MonsterballService {
 
             int deleteIdx;
             try {
-                deleteIdx = Integer.parseInt(sc.nextLine()) - 1;
+                deleteIdx = sc.nextInt() - 1;
 
                 if (deleteIdx == -1) {
                     System.out.println("새로 잡은 포켓몬을 놓아주었습니다.");
