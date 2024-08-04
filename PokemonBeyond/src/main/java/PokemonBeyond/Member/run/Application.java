@@ -21,7 +21,7 @@ public class Application {
 
             switch (input) {
                 case 1: // 회원가입
-                    ms.registMember(signUp());
+                    Member newMember = ms.registMember(signUp());
                     break;
                 case 2: // 로그인
                     Member resultMember = ms.logInMember(checkMemIdAndPwd());

@@ -58,20 +58,20 @@ public class MonsterballService {
         }
         return result;
     }
-    /* 오박사님께 보내는 메서드 */
     public void modifyPokemon(String memberId, int deleteIdx) {
         String abandonPokemon =
                 monsterBallRepository.selectMyPokemon(memberId).get(deleteIdx).getName();
-        ArrayList<MyPokemon> oldList = monsterBallRepository.selectMyPokemon(memberId);
-        if(oldList.size() == 1) {
+        ArrayList<MyPokemon> curList = monsterBallRepository.selectMyPokemon(memberId);
+        if(curList.size() == 1) {
             System.out.println("포켓몬은 최소 1마리 이상 보유해야 합니다!");
             return;
         }
+        // 인덱스 포켓몬 삭제
+        curList.remove(deleteIdx);
         ArrayList<MyPokemon> newList = new ArrayList<>();
         // 삭제 인덱스만 빼고 리스트 복사
-        for (int i = 0; i < 6; i++) {
-            if(i == deleteIdx) continue;
-            newList.set(i, oldList.get(i));
+        for (int i = 0; i < curList.size(); i++) {
+            newList.add(curList.get(i));
         }
         int result = monsterBallRepository.updatePokemonList(memberId, newList);
         if(result == 1) {
@@ -79,6 +79,7 @@ public class MonsterballService {
         }
         else System.out.println("오박사님께서 " + abandonPokemon + "을(를) 거부하셨습니다..");
     }
+
 
     /* 포켓몬 이름 바꾸는 메서드 */
     public void changePokemonName(int pokemonIdx, String memberId, String name) {
