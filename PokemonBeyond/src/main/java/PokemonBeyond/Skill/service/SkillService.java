@@ -2,12 +2,8 @@ package PokemonBeyond.Skill.service;
 
 import PokemonBeyond.MonsterBall.aggregate.MyPokemon;
 import PokemonBeyond.MonsterBall.service.MonsterballService;
-import PokemonBeyond.Pokemon.aggregate.Pokemon;
-import PokemonBeyond.Pokemon.service.PokemonService;
 import PokemonBeyond.Skill.aggregate.Skill;
 import PokemonBeyond.Skill.repository.SkillRepository;
-
-import java.lang.reflect.Member;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -15,7 +11,6 @@ import java.util.Random;
 public class SkillService {
 
     private final SkillRepository sr = new SkillRepository();
-    private final MonsterballService ms = new MonsterballService();
     private final Random random = new Random();
 
     public SkillService() {
@@ -43,9 +38,9 @@ public class SkillService {
         return randomSkills;
     }
 
-    public void selectSkill(String memberId) {
+    public void selectSkill(String memberId,MonsterballService monsterballService) {
         // 회원id를 통해 몬스터볼쪽에서 어떤 포켓몬을 잡았는지 받고 각 포켓몬을 도감에서 스킬을 가져옴
-        ArrayList<MyPokemon> catchPokemonList = ms.showMyPokemon(memberId);
+        ArrayList<MyPokemon> catchPokemonList = monsterballService.showMyPokemon(memberId);
 
         // for문 돌려서 출력하게 하기
         int i = 1;
@@ -55,10 +50,10 @@ public class SkillService {
         }
     }
 
-    public int saveSkill(String memberId, int pokemonNo) {
+    public int saveSkill(String memberId, int pokemonNo,MonsterballService monsterballService) {
         int result = 0;
         ArrayList<Skill> saveSkillList = sr.selectSkills();
-        ArrayList<MyPokemon> catchPokemonList = ms.showMyPokemon(memberId);
+        ArrayList<MyPokemon> catchPokemonList = monsterballService.showMyPokemon(memberId);
         Skill randomSkill;
 
         if(catchPokemonList != null && catchPokemonList.size() < 5) {
@@ -82,8 +77,8 @@ public class SkillService {
         return result;
     }
 
-    public void deleteSkill(String memberId, int pokemonNo, String deleteSkillName) {
-        ArrayList<MyPokemon> catchPokemonList = ms.showMyPokemon(memberId);
+    public void deleteSkill(String memberId, int pokemonNo, String deleteSkillName,MonsterballService monsterballService) {
+        ArrayList<MyPokemon> catchPokemonList = monsterballService.showMyPokemon(memberId);
 
         String pokemonName = "";
         if (catchPokemonList != null) {
@@ -99,9 +94,9 @@ public class SkillService {
         System.out.println(pokemonName + "의 " + deleteSkillName + " 스킬이 삭제되었습니다.");
     }
 
-    public void updateSkill(String memberId, int pokemonNo, String originSKillName) {
+    public void updateSkill(String memberId, int pokemonNo, String originSKillName,MonsterballService monsterballService) {
         ArrayList<Skill> saveSkillList = sr.selectSkills();
-        ArrayList<MyPokemon> catchPokemonList = ms.showMyPokemon(memberId);
+        ArrayList<MyPokemon> catchPokemonList = monsterballService.showMyPokemon(memberId);
         Skill randomSkill;
 
         if(catchPokemonList != null) {
@@ -117,7 +112,6 @@ public class SkillService {
                     int randomIndex = random.nextInt(saveSkillList.size());
                     randomSkill = saveSkillList.get(randomIndex);
 
-                    System.out.println("랜덤스킬: " + randomSkill);
 
                     for (int i = 0; i < skills.size(); i++) {
                         Skill skill = skills.get(i);
@@ -127,7 +121,6 @@ public class SkillService {
                         }
                     }
 
-                    System.out.println("수정되었는지 확인: " + myPokemon.getPokemon().getPoekmonSkill());
                 }
             }
         }

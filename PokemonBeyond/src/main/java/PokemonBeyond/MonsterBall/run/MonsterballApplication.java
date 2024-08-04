@@ -12,8 +12,7 @@ import java.util.Scanner;
 
 public class MonsterballApplication {
     private static String memberId;
-
-    public void run(String Id, MonsterballService monsterballService) {
+    public void run(String Id,MonsterballService monsterballService) {
         Scanner sc = new Scanner(System.in);
         memberId = Id;
         ArrayList<MyPokemon> memberPokemon = monsterballService.showMyPokemon(memberId);
@@ -25,7 +24,7 @@ public class MonsterballApplication {
             System.out.println("2. 포켓몬 이름 변경하기");
             System.out.println("3. 포켓몬 오박사님께 보내기");
             System.out.println("4. 이전 메뉴로 되돌아가기");
-            System.out.println("원하는 메뉴를 선택하세요: ");
+            System.out.print("원하는 메뉴를 선택하세요: ");
             int firstOption = sc.nextInt();
             switch (firstOption) {
                 case 1:

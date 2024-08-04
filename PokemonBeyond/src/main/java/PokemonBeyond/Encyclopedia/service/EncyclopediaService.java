@@ -24,8 +24,10 @@ public class EncyclopediaService {
        Encyclopedia encyclopedia =  encyclopediaRepository.selectEncyclopedia(memberId);
        try{
         System.out.println(encyclopedia.getMemberId()+"님의 도감에 등록된 포켓몬 목록입니다.");
-        for(int i=0; i<encyclopedia.getPokemonNoInEncyclopedia().size(); i++){
-            Pokemon pokemon = pokemonService.findPokemon(encyclopedia.getPokemonNoInEncyclopedia().get(i));
+        ArrayList<Integer> pokemonNoList = encyclopedia.getPokemonNoInEncyclopedia();
+        pokemonNoList.sort(null);
+        for(int i=0; i<pokemonNoList.size(); i++){
+            Pokemon pokemon = pokemonService.findPokemon(pokemonNoList.get(i));
             System.out.println("No. " + pokemon.getPokemonNo() +
                     " " + pokemon.getPokemonName() +
                     " | 공격력: " + pokemon.getPokemonPower());
