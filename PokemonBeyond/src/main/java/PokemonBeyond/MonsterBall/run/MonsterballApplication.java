@@ -3,8 +3,9 @@ package PokemonBeyond.MonsterBall.run;
 import PokemonBeyond.MonsterBall.aggregate.MyPokemon;
 import PokemonBeyond.MonsterBall.service.MonsterballService;
 import PokemonBeyond.Pokemon.aggregate.Pokemon;
-import PokemonBeyond.MonsterBall.exception.EmptyNameexception;
+
 import PokemonBeyond.Skill.aggregate.Skill;
+import PokemonBeyond.exception.EmptyNameexception;
 
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -38,7 +39,7 @@ public class MonsterballApplication {
                         boolean invalidInput = false;
                         while (!invalidInput) {
                             try {
-                                choiceIdx = Integer.parseInt(sc.next()) - 1;
+                                choiceIdx = sc.nextInt() - 1;
                                 invalidInput = true;
                             } catch (NumberFormatException e) {
                                 System.out.println(monsterballService.inquiryMyPokemon(memberId));

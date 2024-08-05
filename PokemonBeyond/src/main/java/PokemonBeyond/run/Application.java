@@ -368,7 +368,7 @@ public class Application {
                         System.out.println(fightingPokemon.getPokemonName() + "은(는) 쓰러졌다!");
                     } else {
                         System.out.println("야생의 " + meetPokemon.getPokemonName() + "은(는) 쓰러졌다!");
-                        System.out.println("신난다! " + meetPokemon.getPokemonName() + "을(를) 잡았다!");
+                        monsterballService.fightCatch(loginId, meetPokemon);
 
                         // 내 도감에 추가
                         addToMyEncyclopedia(loginId, meetPokemon);
