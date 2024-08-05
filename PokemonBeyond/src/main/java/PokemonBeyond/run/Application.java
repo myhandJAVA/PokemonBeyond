@@ -37,10 +37,11 @@ public class Application {
         Member resultMember = null;
         ArrayList<String> graphicList = getGraphic();
 
-        loginId = registOrLogin(sc,resultMember,loginId); // 여기서 반환값으로 안받으면 회원정보 못받아와서 4번메뉴 오류남!!
-        runMainMenu(sc, loginId, resultMember,graphicList);
-        // 몬스터볼 - 오박시님께 보내기 메소드 오류남 - 노션에 사진 올려놓았음!!
-        // 입력 예외처리(숫자를 넣어야하는데 문자입력) - 꼭 해야할까요?
+
+        Member loginMember = registOrLogin(sc,resultMember,loginId);
+        loginId = loginMember.getId();
+        runMainMenu(sc, loginId, loginMember,graphicList);
+
 
 
     }
@@ -61,7 +62,6 @@ public class Application {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            // 해체는 조립의 역순
             close(rset);
             close(stmt);
             close(con);
@@ -148,7 +148,7 @@ public class Application {
         }
     }
 
-    private static String registOrLogin(Scanner sc,Member resultMember, String loginId) {
+    private static Member registOrLogin(Scanner sc,Member resultMember, String loginId) {
         boolean isFirstMenu = true;
         while (isFirstMenu) {
             System.out.println("====== 회원 관리 프로그램 ======");
@@ -159,7 +159,8 @@ public class Application {
 
             switch (input) {
                 case 1: // 회원가입
-                    String registId = memberService.registMember(signUp());
+                    Member newMember = memberService.registMember(signUp());
+                    String registId = newMember.getId();
                     ArrayList<MyPokemon> newMyPokemon = monsterballService.createNewMembersList(registId);
                     encyclopediaService.addEncyclopedia(registId, newMyPokemon.get(0).getPokemon());
 
@@ -177,7 +178,7 @@ public class Application {
                     System.out.println("번호를 잘못 입력하셨습니다.");
             }
         }
-        return loginId;
+        return resultMember;
     }
 
     private static void goMyPage(Member resultMember) {
@@ -204,7 +205,8 @@ public class Application {
                     System.out.println("회원 닉네임을 입력하세요: ");
                     String nickName = sc.nextLine();
                     Member searchedMember = memberService.searchMember(nickName);
-                    System.out.println("결과: " + searchedMember.getNickName());
+                    if (searchedMember == null) System.out.println("일치하는 회원이 없습니다.");
+                    else System.out.println("결과: " + searchedMember.getNickName());
                     break;
                 case 4:
                     sc.nextLine();
@@ -213,7 +215,7 @@ public class Application {
                         String answer = sc.nextLine().toUpperCase();
                         if(answer.equals("Y")){
                             memberService.exitMember(resultMember);
-                            return;
+                            System.exit(0);
                         } else if (answer.equals("N")){
                             break;
                         } else {

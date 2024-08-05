@@ -58,7 +58,6 @@ public class MonsterballService {
         }
         return result;
     }
-    /* 오박사님께 보내는 메서드 */
     public void modifyPokemon(String memberId, int deleteIdx) {
         String abandonPokemon =
                 monsterBallRepository.selectMyPokemon(memberId).get(deleteIdx).getName();
@@ -80,6 +79,7 @@ public class MonsterballService {
         }
         else System.out.println("오박사님께서 " + abandonPokemon + "을(를) 거부하셨습니다..");
     }
+
 
     /* 포켓몬 이름 바꾸는 메서드 */
     public void changePokemonName(int pokemonIdx, String memberId, String name) {
